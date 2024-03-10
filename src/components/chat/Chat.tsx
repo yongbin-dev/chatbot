@@ -1,13 +1,13 @@
 
-import { Box, Button, Textarea } from "@mui/joy";
-import { Backdrop, CircularProgress } from "@mui/material";
 import { RootState } from "@/store/store";
+import { Box, Button, Container, Textarea } from "@mui/joy";
+import { Backdrop, CircularProgress } from "@mui/material";
+import { addChatMessage } from '@store/chat';
 import openAIUtils from "@utils/OpenAiUtils";
+import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addChatMessage } from '@store/chat';
-import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import ChatDrawer from "./ChatDrawer";
+import ChatResult from "./ChatResult";
 import classes from "./style/chat.module.css";
 
 const Chat = () => {
@@ -72,24 +72,27 @@ const Chat = () => {
 
       {/* <ChatDrawer isOpen={false} /> */}
 
-      <Box
-        component="section"
-        sx={{
-          p: 30, border: '1px dashed grey'
-        }}>
-        asd
-      </Box>
+      <Container >
+        <Box sx={{ bgcolor: '#cfe8fc', height: '80vh'}} >
+          <ChatResult result={result}/>
+        </Box>
 
-      <div className={classes.question_wrapper}>
-        <Textarea
-          className={classes.question_textarea}
-          onChange={onChange}
-          placeholder="질문을 입력해주세요"
-          onKeyPress={handleKeyPress}
-        />
+        <Box sx={{ bgcolor: 'red' }} >
+          
+          <div className={classes.question_wrapper}>
+            <Textarea
+              className={classes.question_textarea}
+              onChange={onChange}
+              placeholder="질문을 입력해주세요"
+              onKeyPress={handleKeyPress}
+            />
+            <Button className={classes.question_button} onClick={handleCustomButton}>질문하기</Button>
+          </div>
+        </Box>
+      </Container>
 
-        <Button className={classes.question_button} onClick={handleCustomButton}>질문하기</Button>
-      </div>
+
+   
 
     </>
   )
