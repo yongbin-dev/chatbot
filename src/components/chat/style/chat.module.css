@@ -1,0 +1,24 @@
+
+.answer_wrapper{
+  display: flex;
+  width : 100%;
+  height: 80%;
+  border : 1px solid;
+}
+
+.question_wrapper  {
+  width : 100%;
+  position : absolute;
+  bottom : 0;
+  margin-bottom : 50px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.question_textarea{
+  width : 90%;
+}
+
+.question_button{
+  width : 8%;
+}
