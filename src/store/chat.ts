@@ -3,15 +3,29 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
 
 export interface ChatState {
-  value: number,
-  message : Array<ChatCompletionMessageParam>
+  chats: [{
+    id: number
+    chatMessage: [{
+      message: ChatCompletionMessageParam,
+      result: string,
+      date: any,
+    }],
+    createDate: any
+  }]
 }
 
 const initialState: ChatState = {
-  value: 0,
-  message : [{
-    "role": "user",
-    "content": "친구랑 대화하듯 답변해주세요."
+  chats: [{
+    id: 0,
+    chatMessage: [{
+      message: {
+        "role": "user",
+        "content": "친구랑 대화하듯 답변해주세요.",
+      },
+      result: "",
+      date: "",
+    }],
+    createDate: "",
   }]
 }
 
@@ -19,21 +33,26 @@ export const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
-    addChatMessage : (state , action) =>{
-      state.message.push(action.payload);
+    addChatMessage: (state, action) => {
+
+      const chat = state.chats.filter( (i : any) => i.id == action.payload.id)[0];
+      if(!chat) return;
+
+      const message = action.payload.message;
+      const result = action.payload.result;
+
+      const data = {
+        message,
+        result,
+        date : "" , 
+      }
+
+      chat.chatMessage.push(data);
     },
-    increment: (state) => {
-      state.value += 1
-    },
-    decrement: (state) => {
-      state.value -= 1
-    },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload
-    },
+
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addChatMessage ,  increment, decrement, incrementByAmount } = chatSlice.actions
+export const { addChatMessage } = chatSlice.actions
 export default chatSlice.reducer
