@@ -4,9 +4,10 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import ChatPage from "./pages/ChatPage";
+import MainPage from "./pages/MainPage";
 
 const router = createBrowserRouter([
-  { path: "/", element: <ChatPage /> },
+  { path: "/", element: <MainPage /> },
   { path: "/chat", element: <ChatPage /> },
 ]);
 

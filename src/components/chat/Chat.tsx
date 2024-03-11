@@ -1,7 +1,7 @@
 
 import { RootState } from "@/store/store";
-import { Box, Button, Container, Textarea } from "@mui/joy";
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Button, Textarea } from "@mui/joy";
+import { Backdrop, Box, CircularProgress, Container } from "@mui/material";
 import { addChatMessage } from '@store/chat';
 import openAIUtils from "@utils/OpenAiUtils";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
@@ -12,7 +12,7 @@ import classes from "./style/chat.module.css";
 
 const Chat = () => {
 
-  const { message } = useSelector((state: RootState) => state.chat)
+  const { chats } = useSelector((state: RootState) => state.chat)
   const dispatch = useDispatch()
 
   const [inputValue, setInputValue] = useState<string>();
@@ -38,11 +38,26 @@ const Chat = () => {
 
     setLoading(true);
 
-    const newMessage = message.concat(msg);
+    const chat_id = 0;
+    const chat = chats.filter( (i:any) => i.id === chat_id)[0];
+    const messages = chat.chatMessage.map ((i:any) => i.message);
+
+
+    const newMessage = messages.concat(msg);
     const response = openAIUtils.main(newMessage);
+
     response.then((res: any) => {
       setResult(res.choices[0].message.content)
-      dispatch(addChatMessage(msg));
+
+      const result = res.choices[0].message.content;
+      const data = {
+        id : chat_id , 
+        message : msg ,
+        result 
+      }
+
+      dispatch(addChatMessage(data));
+
     }).finally(() => {
       setLoading(false)
     });
@@ -70,15 +85,21 @@ const Chat = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      {/* <ChatDrawer isOpen={false} /> */}
-
       <Container >
-        <Box sx={{ bgcolor: '#cfe8fc', height: '80vh'}} >
-          <ChatResult result={result}/>
+        <Box sx={{ height: '80vh' }} >
+          <ChatResult chatId={0} />
         </Box>
+      </Container>
 
-        <Box sx={{ bgcolor: 'red' }} >
-          
+      <Box
+        component="footer"
+        sx={{
+          py: 3,
+          px: 2,
+          mt: 'auto',
+        }}
+      >
+        <Container>
           <div className={classes.question_wrapper}>
             <Textarea
               className={classes.question_textarea}
@@ -88,11 +109,8 @@ const Chat = () => {
             />
             <Button className={classes.question_button} onClick={handleCustomButton}>질문하기</Button>
           </div>
-        </Box>
-      </Container>
-
-
-   
+        </Container>
+      </Box>
 
     </>
   )

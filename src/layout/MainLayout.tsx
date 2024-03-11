@@ -1,17 +1,22 @@
-import classes from "./style/mainLayout.module.css"
+import { Box } from "@mui/material"
 
 interface Props {
-  children : JSX.Element[] | JSX.Element
+  children: JSX.Element[] | JSX.Element
 }
 
 
-const MainLayout = ({children} : Props) => {
+const MainLayout = ({ children }: Props) => {
   return (
-    <div className={classes.main_container}>
-      {/* header */}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        minWidth: '100vw'
+      }}
+    >
       {children}
-      {/* footer */}
-    </div>
+    </Box>
   )
 }
 

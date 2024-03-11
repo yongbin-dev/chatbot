@@ -1,7 +1,6 @@
 import MailIcon from '@mui/icons-material/Mail';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -16,7 +15,7 @@ interface Props {
 }
 
 export default function ChatDrawer({isOpen} : Props) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(isOpen);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -54,7 +53,6 @@ export default function ChatDrawer({isOpen} : Props) {
 
   return (
     <div>
-      <Button onClick={toggleDrawer(true)}>Open drawer</Button>
       <Drawer open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
