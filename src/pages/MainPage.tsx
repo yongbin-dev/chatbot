@@ -1,7 +1,7 @@
-import MainLayout from '@/layout/MainLayout';
+import MainLayout from '@layouts/MainLayout';
 import Footer from './Footer';
-import Main from '@/components/main/Main';
-import Header from '../components/chat/ChatHeader';
+import Main from '@components/main/Main';
+import Header from '@components/chat/ChatHeader';
 
 
 export default function MainPage() {

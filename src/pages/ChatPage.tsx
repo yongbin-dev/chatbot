@@ -1,7 +1,7 @@
-import Chat from '@/components/chat/Chat'
-import MainLayout from '@/layout/MainLayout'
-import Header from '../components/chat/ChatHeader'
-import ChatDrawer from '@/components/chat/ChatDrawer'
+import Chat from '@components/chat/Chat'
+import MainLayout from '@layouts/MainLayout'
+import Header from '@components/chat/ChatHeader'
+import ChatDrawer from '@components/chat/ChatDrawer'
 
 const ChatPage = () => {
   return (

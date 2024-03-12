@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
 
 export interface ChatState {

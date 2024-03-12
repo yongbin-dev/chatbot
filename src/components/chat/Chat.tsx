@@ -1,9 +1,9 @@
 
-import { RootState } from "@/store/store";
 import { Button, Textarea } from "@mui/joy";
 import { Backdrop, Box, CircularProgress, Container } from "@mui/material";
-import { addChatMessage } from '@store/chat';
-import openAIUtils from "@utils/OpenAiUtils";
+// import { addChatMessage } from '@redux/slice/chat';
+// import { RootState } from "@redux/store";
+import openAIUtils from "@utils/openai";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,11 +12,10 @@ import classes from "./style/chat.module.css";
 
 const Chat = () => {
 
-  const { chats } = useSelector((state: RootState) => state.chat)
+  const { chats } = useSelector((state: any) => state.chat)
   const dispatch = useDispatch()
 
   const [inputValue, setInputValue] = useState<string>();
-  const [result, setResult] = useState<string>();
   const [loading, setLoading] = useState(false);
 
   const onChange = (e: any) => {
@@ -28,8 +27,6 @@ const Chat = () => {
       alert("질문을 입력해주세요!");
       return;
     }
-
-    initResult();
 
     const msg: ChatCompletionMessageParam = {
       "role": "user",
@@ -47,7 +44,6 @@ const Chat = () => {
     const response = openAIUtils.main(newMessage);
 
     response.then((res: any) => {
-      setResult(res.choices[0].message.content)
 
       const result = res.choices[0].message.content;
       const data = {
@@ -56,7 +52,7 @@ const Chat = () => {
         result 
       }
 
-      dispatch(addChatMessage(data));
+      // dispatch(addChatMessage(data));
 
     }).finally(() => {
       setLoading(false)
@@ -69,10 +65,6 @@ const Chat = () => {
       e.preventDefault();
       handleCustomButton();
     }
-  }
-
-  const initResult = () => {
-    setResult("")
   }
 
 
