@@ -12,11 +12,14 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.15.12",
+    "@mui/icons-material": "^5.15.13",
     "@mui/joy": "^5.0.0-beta.30",
-    "@mui/material": "^5.15.12",
+    "@mui/material": "^5.15.13",
     "@reduxjs/toolkit": "^2.2.1",
+    "@types/nprogress": "^0.2.3",
     "@types/react-syntax-highlighter": "^15.5.11",
+    "framer-motion": "^11.0.14",
+    "nprogress": "^0.2.0",
     "openai": "^4.28.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -24,18 +27,24 @@
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.22.3",
     "react-syntax-highlighter": "^15.5.0",
+    "redux": "^5.0.1",
+    "redux-persist": "^6.0.0",
     "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
-    "@typescript-eslint/eslint-plugin": "^7.0.2",
-    "@typescript-eslint/parser": "^7.0.2",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.34.1",
     "typescript": "^5.2.2",
-    "vite": "^5.1.4"
+    "vite": "^5.1.4",
+    "vite-plugin-svgr": "^4.2.0"
   }
 }

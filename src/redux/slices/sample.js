@@ -1,12 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 // utils
-import axios from '../../utils/axios';
+import axios from "../../utils/axios";
 //
-import { dispatch } from '../store';
+import { dispatch } from "../store";
 
 // ----------------------------------------------------------------------
 
-function objFromArray(array, key = 'id') {
+function objFromArray(array, key = "id") {
   return array.reduce((accumulator, current) => {
     accumulator[current[key]] = current;
     return accumulator;
@@ -24,7 +24,7 @@ const initialState = {
 };
 
 const slice = createSlice({
-  name: 'chat',
+  name: "chat",
   initialState,
   reducers: {
     // START LOADING
@@ -72,7 +72,15 @@ const slice = createSlice({
     // ON SEND MESSAGE
     onSendMessage(state, action) {
       const conversation = action.payload;
-      const { conversationId, messageId, message, contentType, attachments, createdAt, senderId } = conversation;
+      const {
+        conversationId,
+        messageId,
+        message,
+        contentType,
+        attachments,
+        createdAt,
+        senderId,
+      } = conversation;
 
       const newMessage = {
         id: messageId,
@@ -116,7 +124,8 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { addRecipients, onSendMessage, resetActiveConversation } = slice.actions;
+export const { addRecipients, onSendMessage, resetActiveConversation } =
+  slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -124,7 +133,7 @@ export function getContacts() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/chat/contacts');
+      const response = await axios.get("/api/chat/contacts");
       dispatch(slice.actions.getContactsSuccess(response.data.contacts));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -138,8 +147,10 @@ export function getConversations() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/chat/conversations');
-      dispatch(slice.actions.getConversationsSuccess(response.data.conversations));
+      const response = await axios.get("/api/chat/conversations");
+      dispatch(
+        slice.actions.getConversationsSuccess(response.data.conversations)
+      );
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -152,10 +163,12 @@ export function getConversation(conversationKey) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/chat/conversation', {
+      const response = await axios.get("/api/chat/conversation", {
         params: { conversationKey },
       });
-      dispatch(slice.actions.getConversationSuccess(response.data.conversation));
+      dispatch(
+        slice.actions.getConversationSuccess(response.data.conversation)
+      );
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -168,7 +181,7 @@ export function markConversationAsRead(conversationId) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      await axios.get('/api/chat/conversation/mark-as-seen', {
+      await axios.get("/api/chat/conversation/mark-as-seen", {
         params: { conversationId },
       });
       dispatch(slice.actions.markConversationAsReadSuccess({ conversationId }));
@@ -184,10 +197,12 @@ export function getParticipants(conversationKey) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/chat/participants', {
+      const response = await axios.get("/api/chat/participants", {
         params: { conversationKey },
       });
-      dispatch(slice.actions.getParticipantsSuccess(response.data.participants));
+      dispatch(
+        slice.actions.getParticipantsSuccess(response.data.participants)
+      );
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
