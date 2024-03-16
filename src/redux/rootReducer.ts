@@ -1,9 +1,9 @@
-import { combineReducers } from 'redux';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { combineReducers } from "redux";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 // slices
 // import mailReducer from './slices/mail';
-import chatReducer from './slices/chat';
+import chatReducer from "./slices/chat";
 // import productReducer from './slices/product';
 // import calendarReducer from './slices/calendar';
 // import kanbanReducer from './slices/kanban';
@@ -11,21 +11,20 @@ import chatReducer from './slices/chat';
 // ----------------------------------------------------------------------
 
 const rootPersistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  keyPrefix: 'redux-',
+  keyPrefix: "redux-",
   whitelist: [],
 };
 
 const chatPersistConfig = {
-  key: 'chat',
+  key: "chat",
   storage,
-  keyPrefix: 'redux-',
-  whitelist: ['sortBy', 'checkout'],
+  keyPrefix: "redux-chat-",
 };
 
 const rootReducer = combineReducers({
-  chat: chatReducer,
+  chat: persistReducer(chatPersistConfig, chatReducer),
   // product: persistReducer(productPersistConfig, productReducer),
 });
 

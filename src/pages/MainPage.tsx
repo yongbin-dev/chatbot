@@ -7,9 +7,9 @@ import Header from '@components/chat/ChatHeader';
 export default function MainPage() {
   return (
     <MainLayout>
-      <Header/>
-      <Main/>
-      <Footer/>
+      <Header />
+      <Main />
+      <Footer />
     </MainLayout>
-    );
+  );
 }
