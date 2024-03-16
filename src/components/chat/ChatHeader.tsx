@@ -15,7 +15,7 @@ import * as React from 'react';
 
 
 
-export default function Header() {
+export default function ChatHeader() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);

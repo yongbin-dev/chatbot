@@ -1,7 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch as useAppDispatch, useSelector as useAppSelector } from 'react-redux';
-import { persistStore, persistReducer } from 'redux-persist';
-import { rootPersistConfig, rootReducer } from './rootReducer.ts';
+import { configureStore } from "@reduxjs/toolkit";
+import {
+  useDispatch as useAppDispatch,
+  useSelector as useAppSelector,
+} from "react-redux";
+import { persistStore, persistReducer } from "redux-persist";
+import { rootPersistConfig, rootReducer } from "./rootReducer.ts";
 
 // ----------------------------------------------------------------------
 
@@ -22,4 +25,5 @@ const useSelector = useAppSelector;
 
 const useDispatch = () => useAppDispatch();
 
+export type RootState = ReturnType<typeof rootReducer>;
 export { store, persistor, dispatch, useSelector, useDispatch };
