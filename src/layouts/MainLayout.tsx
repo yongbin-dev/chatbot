@@ -11,16 +11,19 @@ const MainLayout = ({ children }: Props) => {
     <>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <Header />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100vh',
-            minWidth: '100vw'
-          }}
-        >
-          {children}
-        </Box>
+        <section>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              marginTop: "150px",
+              minHeight: '100vh',
+              minWidth: '100vw'
+            }}
+          >
+            {children}
+          </Box>
+        </section>
       </div>
     </>
   )

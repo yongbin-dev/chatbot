@@ -1,7 +1,7 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Markdown from '../common/Markdown';
+import Markdown from '../common/CommonMarkdown';
 
 interface Props {
   question: string,

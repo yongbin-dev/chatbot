@@ -1,39 +1,17 @@
 
-import { Textarea } from "@mui/joy";
 
 import { Box, Container } from "@mui/material";
-import Button from '@mui/material/Button';
-import { useState } from "react";
 
+import ChatInput from "./ChatInput";
 import ChatResult from "./ChatResult";
 import classes from "./style/chat.module.css";
 
-
 interface Props {
-  readonly handleQuestionButton : (inputValue : string) => void;
-  readonly handleInitButton : () => void;
+  readonly handleQuestionButton: (inputValue: string) => void;
+  readonly handleInitButton: () => void;
 }
 
-const ChatMain = ( {handleQuestionButton , handleInitButton} : Props ) => {
-
-  const [inputValue, setInputValue] = useState<string>();
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if(!inputValue) return;
-      handleQuestionButton(inputValue);
-    }
-  }
-
-  const onClickQuestionButton = () =>{
-    if(!inputValue) return;
-    handleQuestionButton(inputValue);
-  }
-
+const ChatMain = ({ handleQuestionButton, handleInitButton }: Props) => {
   return (
     <>
       <Container >
@@ -50,32 +28,13 @@ const ChatMain = ( {handleQuestionButton , handleInitButton} : Props ) => {
           mt: 'auto',
         }}
       >
-        <Container>
-          <div className={classes.question_wrapper}>
-            <Textarea
-              className={classes.question_textarea}
-              onChange={onChange}
-              placeholder="질문을 입력해주세요"
-              onKeyPress={handleKeyPress}
-            />
-            <Button 
-              className={classes.question_button} 
-              onClick={onClickQuestionButton} 
-              variant="outlined" 
-              color="success">
-              질문하기
-            </Button>
-            <Button 
-              className={classes.question_button} 
-              onClick={handleInitButton} 
-              variant="outlined" 
-              color="error">
-              초기화
-            </Button>
-          </div>
-        </Container>
+        <div className={classes.question_wrapper}>
+          <ChatInput
+            handleQuestionButton={handleQuestionButton}
+            handleInitButton={handleInitButton}
+          />
+        </div>
       </Box>
-
     </>
   )
 }

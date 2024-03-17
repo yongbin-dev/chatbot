@@ -1,15 +1,17 @@
 
-.answer_wrapper{
-  display: flex;
-  width : 100%;
-  height: 80%;
-  border : 1px solid;
+.question_wrapper { 
+  display : flex;
+  position: fixed;
+  width: 100%;
+  bottom : 0;
+  margin-bottom : 30px;
 }
 
-.question_wrapper  {
+.question_input  {
   width : 100%;
   display: flex;
   justify-content: space-evenly;
+  max-height: 40px;
 }
 
 .question_textarea{
@@ -17,6 +19,13 @@
 }
 
 .question_button{
-  width : 8%;
+  width : 10%;
   margin-left : 5px;
+}
+
+.answer_wrapper{
+  display: flex;
+  width : 100%;
+  height: 80%;
+  border : 1px solid;
 }
