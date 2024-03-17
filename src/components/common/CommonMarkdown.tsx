@@ -4,16 +4,16 @@ import { PrismLight } from 'react-syntax-highlighter';
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface Props {
-  text : string
+  text: string
 }
 
-const Markdown = ({ text } : Props ) => {
-  if(!text) return ;
+const CustomMarkdown = ({ text }: Props) => {
+  if (!text) return;
 
   return (
     // eslint-disable-next-line
     <ReactMarkdown components={{
-      code({ node, inline, className, style, children, ...props }) { 
+      code({ node, inline, className, style, children, ...props }: any) {
         const match = /language-(\w+)/.exec(className || '')
         return !inline && match ? (
           <PrismLight
@@ -36,4 +36,4 @@ const Markdown = ({ text } : Props ) => {
   )
 };
 
-export default Markdown;
+export default CustomMarkdown;
