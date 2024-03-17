@@ -1,16 +1,16 @@
 import { useState } from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
-import { addChatMessage, initChatMessage } from '@redux/slices/chat';
 import { RootState } from '@/redux/store';
+import { addChatMessage, initChatMessage } from '@redux/slices/chat';
+import { useDispatch, useSelector } from "react-redux";
 
 import { Backdrop, CircularProgress } from "@mui/material";
 
-import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import openAIUtils from "@utils/openai";
+import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 
-import ChatDrawer from '@/components/chat/ChatDrawer';
 import ChatMain from '@/components/chat/ChatMain';
+import CommonAlert from '@/components/common/CommonAlert';
 
 const ChatContainer = () => {
 
@@ -19,9 +19,10 @@ const ChatContainer = () => {
   const dispatch = useDispatch()
 
   const handleQuestionButton = async (inputValue: string) => {
-    if (!inputValue) {
-      alert("질문을 입력해주세요!");
-      return;
+    if (!inputValue.trim()) {
+      return (
+        <CommonAlert msg={"질문"}></CommonAlert>
+      )
     }
 
     const msg: ChatCompletionMessageParam = {
