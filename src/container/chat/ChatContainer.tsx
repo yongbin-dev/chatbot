@@ -63,12 +63,12 @@ const ChatContainer = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      <div style={{ display: "flex", flexDirection: "column", height: "100%"}}>
-        <Container sx={{height : '100%'}}>
-          <div style={{ overflow: "hidden", flex: "1 1 0%" , maxHeight : "80vh"}}>
+      <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "auto" }}>
+        <Container sx={{ height: '100%' }}>
+          <div style={{ overflow: "hidden", flex: "1 1 0%", minHeight: "80vh", maxHeight: "80vh" }}>
             <ChatMain />
           </div>
-          <div style={{height : "20vh" , marginTop : "50px"}}>
+          <div style={{ minHeight: "20vh", maxHeight: "20vh", marginTop: "50px" }}>
             <ChatFooter
               handleQuestionButton={handleQuestionButton}
               handleInitButton={handleInitButton}

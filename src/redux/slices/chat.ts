@@ -75,9 +75,18 @@ export const chatSlice = createSlice({
 
       chat.chatMessage.push(data);
     },
+    deleteChatMessage: (state, action) => {
+      const chatId = action.payload.chatId;
+      const messageIndex = action.payload.messageIndex;
+
+      const chat = state.chats.filter((i: any) => i.id == chatId)[0];
+
+      chat.chatMessage.splice(messageIndex, 1);
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { initChatMessage, addChatMessage } = chatSlice.actions;
+export const { initChatMessage, addChatMessage, deleteChatMessage } =
+  chatSlice.actions;
 export default chatSlice.reducer;
