@@ -27,18 +27,18 @@ const Loadable = (Component: any) => (props: any) => {
 
 export default function Router() {
   return useRoutes([
-        {
-          path: '',
-          children: [
-            { element: <Chat />, index: true },
-          ],
-        },
-        {
-          path: 'chat',
-          children: [
-            { element: <Chat />, index: true },
-          ],
-        },
+    {
+      path: '',
+      children: [
+        { element: <Chat />, index: true },
+      ],
+    },
+    {
+      path: 'chat',
+      children: [
+        { element: <Chat />, index: true },
+      ],
+    },
 
     // {
     //   path: 'auth',
@@ -166,7 +166,7 @@ export default function Router() {
 }
 
 // AUTHENTICATION
-const Chat = Loadable(lazy(() => import('../pages/ChatPage')));
+const Chat = Loadable(lazy(() => import('@pages/ChatPage')));
 
 
 // const Register = Loadable(lazy(() => import('../pages/auth/Register')));

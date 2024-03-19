@@ -1,25 +1,22 @@
-
-
-.question_input  {
-  width : 100%;
+.question_input {
+  width: 100%;
   display: flex;
   justify-content: space-evenly;
   max-height: 40px;
-  margin-bottom : 30px;
 }
 
-.question_textarea{
-  width : 90%;
+.question_textarea {
+  width: 90%;
 }
 
-.question_button{
-  width : 10%;
-  margin-left : 5px;
+.question_button {
+  width: 15%;
+  margin-left: 5px;
 }
 
-.answer_wrapper{
+.answer_wrapper {
   display: flex;
-  width : 100%;
+  width: 100%;
   height: 80%;
-  border : 1px solid;
+  border: 1px solid;
 }
