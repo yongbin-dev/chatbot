@@ -11,6 +11,8 @@ import { Navigate, useLocation, useRoutes } from 'react-router-dom';
 // import { PATH_AFTER_LOGIN } from '../config';
 // components
 import LoadingScreen from '@components/LoadingScreen';
+import Page500 from '@/pages/common/Page500';
+import Page404 from '@/pages/common/Page404';
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -25,18 +27,18 @@ const Loadable = (Component: any) => (props: any) => {
 
 export default function Router() {
   return useRoutes([
-    {
-      path: '/',
-      children: [
-        { element: <Chat />, index: true },
-      ],
-    },
-    {
-      path: 'chat',
-      children: [
-        { element: <Chat />, index: true },
-      ],
-    },
+        {
+          path: '',
+          children: [
+            { element: <Chat />, index: true },
+          ],
+        },
+        {
+          path: 'chat',
+          children: [
+            { element: <Chat />, index: true },
+          ],
+        },
 
     // {
     //   path: 'auth',
@@ -147,30 +149,19 @@ export default function Router() {
     // },
 
     // // Main Routes
-    // {
-    //   path: '*',
-    //   element: <LogoOnlyLayout />,
-    //   children: [
-    //     { path: 'coming-soon', element: <ComingSoon /> },
-    //     { path: 'maintenance', element: <Maintenance /> },
-    //     { path: 'pricing', element: <Pricing /> },
-    //     { path: 'payment', element: <Payment /> },
-    //     { path: '500', element: <Page500 /> },
-    //     { path: '404', element: <NotFound /> },
-    //     { path: '*', element: <Navigate to="/404" replace /> },
-    //   ],
-    // },
-    // {
-    //   path: '/',
-    //   element: <MainLayout />,
-    //   children: [
-    //     { element: <HomePage />, index: true },
-    //     { path: 'about-us', element: <About /> },
-    //     { path: 'contact-us', element: <Contact /> },
-    //     { path: 'faqs', element: <Faqs /> },
-    //   ],
-    // },
-    { path: '*', element: <Navigate to="/404" replace /> },
+    {
+      path: '*',
+      // element: <LogoOnlyLayout />,
+      children: [
+        // { path: 'coming-soon', element: <ComingSoon /> },
+        // { path: 'maintenance', element: <Maintenance /> },
+        // { path: 'pricing', element: <Pricing /> },
+        // { path: 'payment', element: <Payment /> },
+        { path: '500', element: <Page500 /> },
+        { path: '404', element: <Page404 /> },
+        { path: '*', element: <Navigate to="/404" replace /> },
+      ],
+    },
   ]);
 }
 
@@ -182,7 +173,7 @@ const Chat = Loadable(lazy(() => import('../pages/ChatPage')));
 // const ResetPassword = Loadable(lazy(() => import('../pages/auth/ResetPassword')));
 // const VerifyCode = Loadable(lazy(() => import('../pages/auth/VerifyCode')));
 
-// DASHBOARD
+// Chat
 
 // GENERAL
 // const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')));
