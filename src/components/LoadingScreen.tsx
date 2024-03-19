@@ -1,7 +1,7 @@
 import { m } from 'framer-motion';
 // @mui
 import { Box } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 //
 import Logo from './Logo';
 import ProgressBar from './ProgressBar';
@@ -23,13 +23,15 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-
-interface Props {
-  isDashboard: boolean,
+interface Prop {
+  isDashboard : boolean;
 }
 
+// LoadingScreen.propTypes = {
+//   isDashboard: PropTypes.bool,
+// };
 
-export default function LoadingScreen({ isDashboard, ...other } : Props) {
+export default function LoadingScreen({ isDashboard , ...other } : Prop) {
   return (
     <>
       <ProgressBar />
@@ -63,6 +65,7 @@ export default function LoadingScreen({ isDashboard, ...other } : Props) {
               height: 100,
               borderRadius: '25%',
               position: 'absolute',
+              border: (theme: any) => `solid 3px ${alpha(theme.palette.primary.dark, 0.24)}`,
             }}
           />
 
@@ -83,6 +86,7 @@ export default function LoadingScreen({ isDashboard, ...other } : Props) {
               height: 120,
               borderRadius: '25%',
               position: 'absolute',
+              border: (theme: any) => `solid 8px ${alpha(theme.palette.primary.dark, 0.24)}`,
             }}
           />
         </RootStyle>
