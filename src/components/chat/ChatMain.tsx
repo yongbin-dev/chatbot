@@ -1,42 +1,31 @@
+import { Box } from "@mui/material";
 
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import ChatCard from "./ChatCard";
 
-import { Box, Container } from "@mui/material";
+const ChatMain = () => {
+  const chatId = 0;
+  const { chats } = useSelector((state: RootState) => state.chat);
+  const chatMessage = chats.filter((i: any) => i.id == chatId)[0].chatMessage;
 
-import ChatInput from "./ChatInput";
-import ChatResult from "./ChatResult";
-import classes from "./style/chat.module.css";
-
-interface Props {
-  readonly handleQuestionButton: (inputValue: string) => void;
-  readonly handleInitButton: () => void;
-}
-
-const ChatMain = ({ handleQuestionButton, handleInitButton }: Props) => {
   return (
     <>
-      <Container >
-        <Box sx={{ height: '80vh' }} >
-          <ChatResult chatId={0} />
+      <div style={{ width: "100vw", height: "100%" , overflowY: "auto"}}>
+        <Box>
+          {chatMessage.map((i: any, index: any) => {
+            if (index == 0) return;
+            return (
+              <div key={index}>
+                <ChatCard question={i.message.content} answer={i.answer} />
+                <br />
+              </div>
+            );
+          })}
         </Box>
-      </Container>
-
-      <Box
-        component="footer"
-        sx={{
-          py: 3,
-          px: 2,
-          mt: 'auto',
-        }}
-      >
-        <div className={classes.question_wrapper}>
-          <ChatInput
-            handleQuestionButton={handleQuestionButton}
-            handleInitButton={handleInitButton}
-          />
-        </div>
-      </Box>
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default ChatMain; 
+export default ChatMain;

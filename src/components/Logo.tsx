@@ -19,7 +19,7 @@ export default function Logo({ disabledLink = false, sx } : Prop ) {
   // const PRIMARY_DARK = theme.palette.primary.dark;
 
   const logo = (
-      <LogoImg width={200} height={200}/>
+      <LogoImg {...sx} />
   );
 
   if (disabledLink) {
