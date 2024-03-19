@@ -48,7 +48,7 @@ export default function LoadingScreen({ isDashboard , ...other } : Prop) {
               repeat: Infinity,
             }}
           >
-            <Logo disabledLink sx={{ width: 64, height: 64 }} />
+            <Logo disabledLink sx={{ width: 200, height: 200 }} />
           </m.div>
 
           <Box
@@ -65,30 +65,10 @@ export default function LoadingScreen({ isDashboard , ...other } : Prop) {
               height: 100,
               borderRadius: '25%',
               position: 'absolute',
-              border: (theme: any) => `solid 3px ${alpha(theme.palette.primary.dark, 0.24)}`,
+              border: (theme: any) => `solid 3px ${alpha(theme.palette.primary.dark, 0.10 )}`,
             }}
           />
 
-          <Box
-            component={m.div}
-            animate={{
-              scale: [1, 1.2, 1.2, 1, 1],
-              rotate: [0, 270, 270, 0, 0],
-              opacity: [1, 0.25, 0.25, 0.25, 1],
-            }}
-            transition={{
-              ease: 'linear',
-              duration: 3.2,
-              repeat: Infinity,
-            }}
-            sx={{
-              width: 120,
-              height: 120,
-              borderRadius: '25%',
-              position: 'absolute',
-              border: (theme: any) => `solid 8px ${alpha(theme.palette.primary.dark, 0.24)}`,
-            }}
-          />
         </RootStyle>
       )}
     </>
