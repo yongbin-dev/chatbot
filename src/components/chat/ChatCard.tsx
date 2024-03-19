@@ -1,7 +1,7 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Markdown from '../common/CommonMarkdown';
+import CustomMarkdown from '../common/CommonMarkdown';
 
 interface Props {
   question: string,
@@ -17,7 +17,7 @@ const ChatCard = ({ question, answer }: Props) => {
         </Typography>
 
         <Typography variant="body2">
-          <Markdown text={answer} />
+          <CustomMarkdown text={answer} />
         </Typography>
 
       </CardContent>
