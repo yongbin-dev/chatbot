@@ -47,12 +47,30 @@ const ChatContainer = () => {
 
     dispatch(addChatMessage(data));
     setLoading(false);
+
+    moveScrollBottom();
   };
 
   const handleInitButton = () => {
     const chat_id = 0;
     dispatch(initChatMessage({ id: chat_id }));
   };
+
+  const moveScrollBottom = () =>{
+    const mainDiv = document.getElementById('mainDiv');
+    if(!mainDiv) return;
+    mainDiv.scrollTop = mainDiv.scrollHeight;
+  }
+
+  
+  window.addEventListener('scroll', function(){
+    const mainDiv = document.getElementById('mainDiv');
+    if(!mainDiv) return;
+    // window.scrollY = mainDiv.scrollY;
+    mainDiv.scrollTop = window.scrollY ;
+    debugger
+  });
+
 
   return (
     <main >
@@ -65,7 +83,7 @@ const ChatContainer = () => {
 
       <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "auto" }}>
         <Container sx={{ height: '100%' }}>
-          <div style={{ overflow: "hidden", flex: "1 1 0%", minHeight: "80vh", maxHeight: "80vh" }}>
+          <div id={"mainDiv"} style={{ overflow: "hidden", flex: "1 1 0%", minHeight: "80vh", maxHeight: "80vh" }}>
             <ChatMain />
           </div>
           <div style={{ minHeight: "20vh", maxHeight: "20vh", marginTop: "50px" }}>
