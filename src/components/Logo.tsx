@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 // import { useTheme } from '@mui/material/styles';
 
@@ -9,13 +9,20 @@ import LogoImg from "../assets/logo.svg?react";
 
 interface Prop {
   disabledLink: boolean,
+  navigateUrl?: string,
   sx: object,
 }
 
-export default function Logo({ disabledLink = false, sx }: Prop) {
+export default function Logo({ disabledLink = false, navigateUrl, sx }: Prop) {
+  const navigate = useNavigate()
+
+  const handleLogoButton = () => {
+    if (!disabledLink || !navigateUrl) return;
+    navigate(navigateUrl);
+  }
 
   const logo = (
-    <LogoImg {...sx} />
+    <LogoImg {...sx} onClick={handleLogoButton} />
   );
 
 

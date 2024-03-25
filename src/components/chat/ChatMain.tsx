@@ -3,6 +3,7 @@ import { deleteChatMessage } from "@/redux/slices/chat";
 import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import ChatCard from "./ChatCard";
+import { Container } from "@mui/material";
 
 const ChatMain = () => {
   const chatId = 0;
@@ -20,7 +21,7 @@ const ChatMain = () => {
 
   return (
     <>
-      <div style={{ width: "100vw", height: "100%", overflowY: "auto" }}>
+      <Container>
         {chatMessage.map((i: any, index: any) => {
           if (index == 0) return;
           return (
@@ -30,7 +31,7 @@ const ChatMain = () => {
             </div>
           );
         })}
-      </div>
+      </Container>
     </>
   );
 };

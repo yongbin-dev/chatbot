@@ -1,22 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { RootState } from "@/redux/store";
 import { addChatMessage, initChatMessage } from "@redux/slices/chat";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop, CircularProgress, IconButton } from "@mui/material";
 
 import openAIUtils from "@utils/openai";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
+import DensityMediumIcon from '@mui/icons-material/DensityMedium';
+
+import ChatDrawer from "@/components/chat/ChatDrawer";
 import ChatFooter from "@/components/chat/ChatFooter";
 import ChatMain from "@/components/chat/ChatMain";
 import CommonAlert from "@/components/common/CommonAlert";
 
-import { Container } from "@mui/material";
 
 const ChatContainer = () => {
   const [loading, setLoading] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState<boolean>();
   const { chats } = useSelector((state: RootState) => state.chat);
   const dispatch = useDispatch();
 
@@ -48,7 +51,6 @@ const ChatContainer = () => {
     dispatch(addChatMessage(data));
     setLoading(false);
 
-    moveScrollBottom();
   };
 
   const handleInitButton = () => {
@@ -56,24 +58,20 @@ const ChatContainer = () => {
     dispatch(initChatMessage({ id: chat_id }));
   };
 
-  const moveScrollBottom = () =>{
-    const mainDiv = document.getElementById('mainDiv');
-    if(!mainDiv) return;
-    mainDiv.scrollTop = mainDiv.scrollHeight;
+  const handleIconButtonClick = () => {
+    setDrawerOpen(!drawerOpen);
   }
 
-  
-  window.addEventListener('scroll', function(){
+  useEffect(() => {
+    if (loading == true) return;
     const mainDiv = document.getElementById('mainDiv');
-    if(!mainDiv) return;
-    // window.scrollY = mainDiv.scrollY;
-    mainDiv.scrollTop = window.scrollY ;
-    debugger
-  });
+    if (!mainDiv) return;
+    mainDiv.scrollTop = mainDiv.scrollHeight + 1000;
 
+  }, [loading])
 
   return (
-    <main >
+    <>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
@@ -81,20 +79,25 @@ const ChatContainer = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "auto" }}>
-        <Container sx={{ height: '100%' }}>
-          <div id={"mainDiv"} style={{ overflow: "hidden", flex: "1 1 0%", minHeight: "80vh", maxHeight: "80vh" }}>
-            <ChatMain />
-          </div>
-          <div style={{ minHeight: "20vh", maxHeight: "20vh", marginTop: "50px" }}>
-            <ChatFooter
-              handleQuestionButton={handleQuestionButton}
-              handleInitButton={handleInitButton}
-            />
-          </div>
-        </Container>
+      <div style={{ position: "absolute", top: "10px", left: "10px" }}>
+        <IconButton onClick={handleIconButtonClick}>
+          <DensityMediumIcon />
+        </IconButton>
+      </div >
+
+      <ChatDrawer isOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+
+      <div id={"mainDiv"} style={{ marginTop: "20px", width: "100%", height: "85vh", overflowY: "scroll" }}>
+        <ChatMain />
       </div>
-    </main>
+
+      <div style={{ width: "100%", minHeight: "10vh", position: "absolute", bottom: '0' }}>
+        <ChatFooter
+          handleQuestionButton={handleQuestionButton}
+          handleInitButton={handleInitButton}
+        />
+      </div>
+    </>
   );
 };
 
