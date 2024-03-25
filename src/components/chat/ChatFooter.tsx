@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 
 import classes from "./style/chat.module.css";
 import { useState } from "react";
+import { Container } from "@mui/material";
 
 interface Props {
   readonly handleQuestionButton: (inputValue: string) => void;
@@ -31,33 +32,35 @@ const ChatFooter = ({ handleQuestionButton, handleInitButton }: Props) => {
   };
 
   return (
-    <div className={classes.question_input}>
-      <Textarea
-        className={classes.question_textarea}
-        onChange={onChange}
-        placeholder="질문을 입력해주세요"
-        onKeyPress={handleKeyPress}
-        value={inputValue}
-      />
+    <Container>
+      <div className={classes.question_input}>
+        <Textarea
+          className={classes.question_textarea}
+          onChange={onChange}
+          placeholder="질문을 입력해주세요"
+          onKeyPress={handleKeyPress}
+          value={inputValue}
+        />
 
-      <Button
-        className={classes.question_button}
-        onClick={onClickQuestionButton}
-        variant="outlined"
-        color="success"
-      >
-        질문하기
-      </Button>
+        <Button
+          className={classes.question_button}
+          onClick={onClickQuestionButton}
+          variant="outlined"
+          color="success"
+        >
+          질문하기
+        </Button>
 
-      <Button
-        className={classes.question_button}
-        onClick={handleInitButton}
-        variant="outlined"
-        color="error"
-      >
-        초기화
-      </Button>
-    </div>
+        <Button
+          className={classes.question_button}
+          onClick={handleInitButton}
+          variant="outlined"
+          color="error"
+        >
+          초기화
+        </Button>
+      </div>
+    </Container>
   );
 };
 
