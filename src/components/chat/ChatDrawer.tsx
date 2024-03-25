@@ -8,17 +8,17 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import * as React from 'react';
+import { useState } from 'react';
 
 interface Props {
-  isOpen : boolean
+  isOpen?: boolean,
+  readonly setDrawerOpen: (isOpen: boolean) => void;
 }
 
-export default function ChatDrawer({isOpen} : Props) {
-  const [open, setOpen] = React.useState(isOpen);
+export default function ChatDrawer({ isOpen = false, setDrawerOpen }: Props) {
 
   const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
+    setDrawerOpen(newOpen);
   };
 
   const DrawerList = (
@@ -53,7 +53,7 @@ export default function ChatDrawer({isOpen} : Props) {
 
   return (
     <div>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
+      <Drawer open={isOpen} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
     </div>

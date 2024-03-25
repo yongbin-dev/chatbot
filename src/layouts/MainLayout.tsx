@@ -1,4 +1,3 @@
-import Header from "@/pages/Header"
 
 interface Props {
   children: JSX.Element[] | JSX.Element
@@ -7,8 +6,7 @@ interface Props {
 
 const MainLayout = ({ children }: Props) => {
   return (
-    <div style={{width : '100vw'  , height : '100vh'}}>
-      <Header />
+    <div style={{ width: '100vw', height: '100vh' }}>
       {children}
     </div>
   )

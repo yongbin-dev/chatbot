@@ -1,11 +1,11 @@
-import styles from "./header.module.css"
+import AppAppBar from "./AppAppBar";
 
 
 const Header = () => {
   return (
-    <>
-      <div className={styles.mainHeader} ></div>
-    </>
+    <div style={{ minHeight: "200px" }}>
+      <AppAppBar />
+    </div>
   )
 }
 
