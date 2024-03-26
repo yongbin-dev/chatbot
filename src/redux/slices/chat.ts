@@ -1,18 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 export interface ChatState {
   chats: [
     {
       id: number;
       title: string;
-      chatMessage: [
-        {
-          message: ChatCompletionMessageParam;
-          answer: string;
-          date: string;
-        }
-      ];
+      chatMessage: any;
       usage: {
         completion_tokens: number;
         prompt_tokens: number;
@@ -52,6 +45,51 @@ export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    addChat: (state, action) => {
+      const title = action.payload.title;
+      const idArr = state.chats.map((i: any) => i.id);
+      const maxID = Math.max(...idArr);
+
+      let id = maxID;
+
+      if (!isNaN(maxID)) {
+        id = 0;
+      }
+
+      const chat = {
+        id,
+        title: title,
+        chatMessage: [
+          {
+            message: {
+              role: "user",
+              content: "친구랑 대화하듯 답변해주세요.",
+            },
+            answer: "",
+            date: "",
+          },
+        ],
+        usage: {
+          completion_tokens: 0,
+          prompt_tokens: 0,
+          total_tokens: 0,
+        },
+        createDate: "",
+      };
+
+      state.chats.push(chat);
+    },
+
+    deleteChat: (state, action) => {
+      const id = action.payload.id;
+
+      state.chats.map((i: any, index: number) => {
+        if (i.id == id) {
+          state.chats.splice(index, 1);
+          return;
+        }
+      });
+    },
     initChatMessage: (state, action) => {
       const chat = state.chats.filter((i: any) => i.id == action.payload.id)[0];
       chat.chatMessage = initialState.chats[0].chatMessage;
@@ -87,6 +125,11 @@ export const chatSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { initChatMessage, addChatMessage, deleteChatMessage } =
-  chatSlice.actions;
+export const {
+  addChat,
+  deleteChat,
+  initChatMessage,
+  addChatMessage,
+  deleteChatMessage,
+} = chatSlice.actions;
 export default chatSlice.reducer;

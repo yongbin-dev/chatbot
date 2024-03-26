@@ -5,8 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import ChatCard from "./ChatCard";
 import { Container } from "@mui/material";
 
-const ChatMain = () => {
-  const chatId = 0;
+interface Props {
+  id: number;
+}
+
+const ChatMain = ({ id }: Props) => {
+  const chatId: number = id;
   const { chats } = useSelector((state: RootState) => state.chat);
   const chatMessage = chats.filter((i: any) => i.id == chatId)[0].chatMessage;
   const dispatch = useDispatch();
