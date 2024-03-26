@@ -32,7 +32,6 @@ const ChatCard = ({ question, answer, messageId, handleDeleteButton }: Props) =>
         <Typography variant="body2">
           <CustomMarkdown text={answer} />
         </Typography>
-
       </CardContent>
     </Card>
   );

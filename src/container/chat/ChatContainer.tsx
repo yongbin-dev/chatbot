@@ -18,6 +18,8 @@ import CommonAlert from "@/components/common/CommonAlert";
 
 
 const ChatContainer = () => {
+
+  const [chatId, setChatId] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
   const { chats } = useSelector((state: RootState) => state.chat);
@@ -35,7 +37,7 @@ const ChatContainer = () => {
 
     setLoading(true);
 
-    const chat_id = 0;
+    const chat_id = chatId;
     const chat = chats.filter((i: any) => i.id === chat_id)[0];
     const messages = chat.chatMessage.map((i: any) => i.message);
 
@@ -63,12 +65,36 @@ const ChatContainer = () => {
   }
 
   useEffect(() => {
+
+  }, [])
+
+  useEffect(() => {
     if (loading == true) return;
     const mainDiv = document.getElementById('mainDiv');
     if (!mainDiv) return;
     mainDiv.scrollTop = mainDiv.scrollHeight + 1000;
 
   }, [loading])
+
+
+  if (!(chats.length > 0)) {
+    return (
+      <>
+        <div style={{ position: "absolute", top: "10px", left: "10px" }}>
+          <IconButton onClick={handleIconButtonClick}>
+            <DensityMediumIcon />
+          </IconButton>
+        </div >
+
+        <ChatDrawer
+          chats={chats}
+          isOpen={drawerOpen}
+          setDrawerOpen={setDrawerOpen}
+          setChatId={setChatId}
+        />
+      </>
+    )
+  }
 
   return (
     <>
@@ -85,10 +111,15 @@ const ChatContainer = () => {
         </IconButton>
       </div >
 
-      <ChatDrawer isOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+      <ChatDrawer
+        chats={chats}
+        isOpen={drawerOpen}
+        setDrawerOpen={setDrawerOpen}
+        setChatId={setChatId}
+      />
 
       <div id={"mainDiv"} style={{ marginTop: "20px", width: "100%", height: "85vh", overflowY: "scroll" }}>
-        <ChatMain />
+        <ChatMain id={chatId} />
       </div>
 
       <div style={{ width: "100%", minHeight: "10vh", position: "absolute", bottom: '0' }}>
@@ -97,6 +128,7 @@ const ChatContainer = () => {
           handleInitButton={handleInitButton}
         />
       </div>
+
     </>
   );
 };
