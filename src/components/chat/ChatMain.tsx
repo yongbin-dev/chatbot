@@ -1,18 +1,16 @@
 
-import { deleteChatMessage } from "@/redux/slices/chat";
-import { RootState } from "@/redux/store";
-import { useDispatch, useSelector } from "react-redux";
-import ChatCard from "./ChatCard";
 import { Container } from "@mui/material";
+import { useDispatch } from "react-redux";
+import ChatCard from "./ChatCard";
+import { deleteChatMessage } from "@/redux/slices/chat";
+import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 interface Props {
-  id: number;
+  chatId: string
+  chatMessage: ChatCompletionMessageParam[];
 }
 
-const ChatMain = ({ id }: Props) => {
-  const chatId: number = id;
-  const { chats } = useSelector((state: RootState) => state.chat);
-  const chatMessage = chats.filter((i: any) => i.id == chatId)[0].chatMessage;
+const ChatMain = ({ chatId, chatMessage }: Props) => {
   const dispatch = useDispatch();
 
   const handleDeleteButton = (messageIndex: number) => {
@@ -30,7 +28,12 @@ const ChatMain = ({ id }: Props) => {
           if (index == 0) return;
           return (
             <div key={index}>
-              <ChatCard question={i.message.content} answer={i.answer} messageId={index} handleDeleteButton={handleDeleteButton} />
+              <ChatCard
+                question={i.message.content}
+                answer={i.answer}
+                messageId={index}
+                handleDeleteButton={handleDeleteButton}
+              />
               <br />
             </div>
           );
