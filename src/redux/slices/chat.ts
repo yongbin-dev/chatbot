@@ -50,11 +50,7 @@ export const chatSlice = createSlice({
       const idArr = state.chats.map((i: any) => i.id);
       const maxID = Math.max(...idArr);
 
-      let id = maxID;
-
-      if (!isNaN(maxID)) {
-        id = 0;
-      }
+      let id = maxID + 1;
 
       const chat = {
         id,

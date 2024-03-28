@@ -1,6 +1,6 @@
+import { OPEN_API } from "@/config";
 import OpenAI from "openai";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import { OPEN_API } from "@/config";
 
 const openai = new OpenAI({
   apiKey: OPEN_API,
@@ -10,6 +10,7 @@ const openai = new OpenAI({
 const openAIUtils = {
   async sendQuestion(
     originalMessage: ChatCompletionMessageParam[],
+    model: string,
     isSlice = true
   ) {
     let message = originalMessage;
@@ -19,7 +20,7 @@ const openAIUtils = {
     }
 
     const stream = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model,
       messages: message,
       temperature: 0.7,
     });
