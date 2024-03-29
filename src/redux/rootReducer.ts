@@ -24,9 +24,15 @@ const chatPersistConfig = {
   keyPrefix: "redux-chat-",
 };
 
+const modelPersistConfig = {
+  key: "model",
+  storage,
+  keyPrefix: "redux-chat-",
+};
+
 const rootReducer = combineReducers({
   chat: persistReducer(chatPersistConfig, chatReducer),
-  model: modelReducer,
+  model: persistReducer(modelPersistConfig, modelReducer),
   // product: persistReducer(productPersistConfig, productReducer),
 });
 

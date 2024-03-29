@@ -26,6 +26,18 @@ const openAIUtils = {
     });
     return stream;
   },
+  async sendQuestionImageGeneration(prompt: string) {
+    const stream = await openai.images.generate({
+      model: "dall-e-3",
+      prompt,
+      size: "1024x1024",
+      quality: "standard",
+      n: 1,
+    });
+
+    console.log(stream.data[0].url);
+    // image_url = stream.data[0].url
+  },
 };
 
 const sliceMessage = (originalMessage: ChatCompletionMessageParam[]) => {
