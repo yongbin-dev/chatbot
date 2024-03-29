@@ -1,25 +1,22 @@
 import { model_type_list as modelType } from "@/data/model-type";
 import { deleteChat } from '@/redux/slices/chat';
 import { changeModel } from '@/redux/slices/model';
+import { RootState } from "@/redux/store";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ChatIcon from '@mui/icons-material/Chat';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { FormControl, FormLabel, IconButton } from '@mui/material';
+import { FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChatDialog from './ChatDialog';
 import style from "./style/chat.module.css";
-import { RootState } from "@/redux/store";
 
 interface Props {
   isOpen?: boolean,
@@ -32,6 +29,7 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
 
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
   const { model } = useSelector((state: RootState) => state.model);
+
 
   const dispatch = useDispatch();
 
@@ -54,16 +52,19 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
     dispatch(deleteChat(data))
   }
 
-  const handleModelRadioButton = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleChange = (event: SelectChangeEvent) => {
     const model = event.target.value;
     if (!model) return;
     dispatch(changeModel({ model }))
-  }
+  };
+
 
 
   const ModelTypeList = (
+    // <FormControlLabel value={modelType.model} control={<Radio />} label={modelType.key} />
     modelType.map((modelType: any) => {
-      return <FormControlLabel value={modelType.model} control={<Radio />} label={modelType.key} />
+      return <MenuItem value={modelType.model}>{modelType.key}</MenuItem>
     })
   )
 
@@ -95,7 +96,20 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
       </List>
 
       <div className={style.drawer_radio_wrapper}>
-        <FormControl>
+        <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+          <InputLabel id="demo-select-small-label">Model</InputLabel>
+          <Select
+            labelId="demo-select-small-label"
+            id="demo-select-small"
+            value={model}
+            label="Model"
+            onChange={handleChange}
+          >
+            {ModelTypeList}
+          </Select>
+        </FormControl>
+
+        {/* <FormControl>
           <FormLabel id="demo-radio-buttons-group-label">Model</FormLabel>
           <RadioGroup
             aria-labelledby="demo-radio-buttons-group-label"
@@ -106,9 +120,8 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
           >
             {ModelTypeList}
           </RadioGroup>
-        </FormControl>
+        </FormControl> */}
       </div>
-
     </Box>
   );
 
