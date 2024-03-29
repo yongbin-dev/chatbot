@@ -1,25 +1,31 @@
-import { Textarea } from "@mui/joy";
-
-
-import Button from "@mui/material/Button";
-
-import classes from "./style/chat.module.css";
-import { useState } from "react";
+import { changeModel } from "@/redux/slices/model";
+import { RootState } from "@/redux/store";
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { Container } from "@mui/material";
+import Button from "@mui/material/Button";
+import Checkbox from '@mui/material/Checkbox';
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import classes from "./style/chat.module.css";
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 interface Props {
   readonly handleQuestionButton: (inputValue: string) => void;
   readonly handleInitButton: () => void;
 }
 
-const ChatFooter = ({ handleQuestionButton, handleInitButton }: Props) => {
+const ChatFooter = ({ handleQuestionButton }: Props) => {
+
+  const dispatch = useDispatch();
+  const { isPic } = useSelector((state: RootState) => state.model);
+
   const [inputValue, setInputValue] = useState<string>();
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.ctrlKey && e.key === "Enter") {
       e.preventDefault();
       onClickQuestionButton();
     }
@@ -31,35 +37,54 @@ const ChatFooter = ({ handleQuestionButton, handleInitButton }: Props) => {
     setInputValue("");
   };
 
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    dispatch(changeModel({ isPic: checked }))
+  }
+
   return (
     <Container>
-      <div className={classes.question_input}>
-        <Textarea
-          className={classes.question_textarea}
-          onChange={onChange}
-          placeholder="질문을 입력해주세요"
-          onKeyPress={handleKeyPress}
-          value={inputValue}
-        />
+      <div className={classes.question_wrapper}>
+        <div className={classes.textarea_wrapper}>
+          <textarea
+            className={classes.textarea_input}
+            onChange={onChange}
+            placeholder="질문을 입력해주세요"
+            onKeyUp={handleKeyPress}
+            value={inputValue}
+          />
+        </div>
 
-        <Button
-          className={classes.question_button}
-          onClick={onClickQuestionButton}
-          variant="outlined"
-          color="success"
-        >
-          질문하기
-        </Button>
+        <div className={classes.button_wrapper}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Checkbox {...label} defaultChecked color="success" onChange={handleOnChange} checked={isPic} />
+            <span style={{ color: "grey" }}>사진으로 보기</span>
+          </div>
+          {/* <Button
+            onClick={handleInitButton}
+            variant="outlined"
+            color="error"
+          >
+            초기화
+          </Button> */}
 
-        <Button
-          className={classes.question_button}
-          onClick={handleInitButton}
-          variant="outlined"
-          color="error"
-        >
-          초기화
-        </Button>
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            color="success"
+            tabIndex={-1}
+            onClick={onClickQuestionButton}
+            startIcon={<PlayCircleOutlineIcon />}
+          >
+            질문하기
+            {/* <VisuallyHiddenInput type="file" /> */}
+          </Button>
+        </div>
       </div>
+      {/* <div className={classes.question_input}>
+        
+      </div> */}
     </Container>
   );
 };

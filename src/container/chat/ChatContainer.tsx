@@ -21,7 +21,7 @@ const ChatContainer = ({ chatId }: Props) => {
 
   const [loading, setLoading] = useState(false);
   const { chats } = useSelector((state: RootState) => state.chat);
-  const { model } = useSelector((state: RootState) => state.model);
+  const { model, isPic } = useSelector((state: RootState) => state.model);
   const chatMessage = chats.filter((i: any) => i.id == chatId)[0].chatMessage;
 
   const dispatch = useDispatch();
@@ -31,28 +31,33 @@ const ChatContainer = ({ chatId }: Props) => {
       return <CommonAlert msg={"질문"}></CommonAlert>;
     }
 
-    const msg: ChatCompletionMessageParam = {
-      role: "user",
-      content: inputValue,
-    };
 
     setLoading(true);
 
-    const newMessage = chatMessage.map((i: any) => {
-      return i.message
-    })
+    if (isPic) {
+      await openAIUtils.sendQuestionImageGeneration("무서운 강아지 사진 보여줘");
+    } else {
 
-    newMessage.push(msg);
+      const newMessage = chatMessage.map((i: any) => {
+        return i.message
+      })
 
-    const result = await openAIUtils.sendQuestion(newMessage, model, false);
+      const msg: ChatCompletionMessageParam = {
+        role: "user",
+        content: inputValue,
+      };
 
-    const data = {
-      id: chatId,
-      message: msg,
-      result,
-    };
+      newMessage.push(msg);
+      const result = await openAIUtils.sendQuestion(newMessage, model, false);
+      const data = {
+        id: chatId,
+        message: msg,
+        result,
+      };
 
-    dispatch(addChatMessage(data));
+      dispatch(addChatMessage(data));
+    }
+
     setLoading(false);
   };
 
@@ -77,7 +82,7 @@ const ChatContainer = ({ chatId }: Props) => {
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      <div id={"mainDiv"} style={{ marginTop: "20px", width: "100%", height: "85vh", overflowY: "scroll" }}>
+      <div id={"mainDiv"} style={{ marginTop: "20px", width: "100%", height: "80vh", overflowY: "scroll" }}>
         <ChatMain chatId={chatId} chatMessage={chatMessage} />
       </div>
 

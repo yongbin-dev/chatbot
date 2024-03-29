@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 const ChatPage = () => {
 
   const { chats } = useSelector((state: RootState) => state.chat);
-  const [chatId, setChatId] = useState<string>();
+  const [chatId, setChatId] = useState<string>("0");
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
 
   const handleIconButtonClick = () => {
@@ -41,9 +41,7 @@ const ChatPage = () => {
       />
 
       {
-        chatId == null ?
-          <ChatContainer chatId={"0"} /> :
-          <ChatContainer chatId={chatId} />
+        <ChatContainer chatId={chatId} />
       }
 
     </MainLayout>
