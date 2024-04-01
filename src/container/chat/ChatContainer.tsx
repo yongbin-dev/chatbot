@@ -4,7 +4,6 @@ import { RootState } from "@/redux/store";
 import { addChatMessage, initChatMessage } from "@redux/slices/chat";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Backdrop, CircularProgress } from "@mui/material";
 
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
@@ -12,6 +11,13 @@ import ChatFooter from "@/components/chat/ChatFooter";
 import ChatMain from "@/components/chat/ChatMain";
 import CommonAlert from "@/components/common/CommonAlert";
 import openAIUtils from "@/utils/openai";
+
+
+type CurrentChat = {
+  id: number;
+  question: string;
+  answer: string;
+}
 
 interface Props {
   chatId: string,
@@ -22,6 +28,7 @@ const ChatContainer = ({ chatId }: Props) => {
   const [loading, setLoading] = useState(false);
   const { chats } = useSelector((state: RootState) => state.chat);
   const { model, isPic } = useSelector((state: RootState) => state.model);
+  const [result, setResult] = useState<CurrentChat>();
   const chatMessage = chats.filter((i: any) => i.id == chatId)[0].chatMessage;
 
   const dispatch = useDispatch();
@@ -30,9 +37,6 @@ const ChatContainer = ({ chatId }: Props) => {
     if (!inputValue.trim()) {
       return <CommonAlert msg={"질문"}></CommonAlert>;
     }
-
-
-    setLoading(true);
 
     if (isPic) {
       await openAIUtils.sendQuestionImageGeneration("무서운 강아지 사진 보여줘");
@@ -48,17 +52,38 @@ const ChatContainer = ({ chatId }: Props) => {
       };
 
       newMessage.push(msg);
+
+
+      setLoading(true);
       const result = await openAIUtils.sendQuestion(newMessage, model, false);
+
+      let answerStream = "";
+      for await (const chunk of result) {
+
+        if (chunk.choices[0]?.delta?.content) {
+          answerStream += chunk.choices[0]?.delta?.content;
+        }
+
+
+        const currentChat: CurrentChat = {
+          id: parseInt(chatId),
+          question: inputValue,
+          answer: answerStream
+        }
+
+        setResult(currentChat);
+      }
+
       const data = {
         id: chatId,
         message: msg,
-        result,
+        result: answerStream,
       };
 
+      setResult(undefined)
+      setLoading(false);
       dispatch(addChatMessage(data));
     }
-
-    setLoading(false);
   };
 
   const handleInitButton = () => {
@@ -75,15 +100,15 @@ const ChatContainer = ({ chatId }: Props) => {
 
   return (
     <>
-      <Backdrop
+      {/* <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
       >
         <CircularProgress color="inherit" />
-      </Backdrop>
+      </Backdrop> */}
 
       <div id={"mainDiv"} style={{ marginTop: "20px", width: "100%", height: "80vh", overflowY: "scroll" }}>
-        <ChatMain chatId={chatId} chatMessage={chatMessage} />
+        <ChatMain chatId={chatId} chatMessage={chatMessage} currentMessage={result} />
       </div>
 
       <div style={{ width: "100%", minHeight: "10vh", position: "absolute", bottom: '0' }}>
@@ -92,7 +117,6 @@ const ChatContainer = ({ chatId }: Props) => {
           handleInitButton={handleInitButton}
         />
       </div>
-
     </>
   );
 };

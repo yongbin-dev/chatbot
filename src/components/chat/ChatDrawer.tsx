@@ -64,7 +64,7 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
   const ModelTypeList = (
     // <FormControlLabel value={modelType.model} control={<Radio />} label={modelType.key} />
     modelType.map((modelType: any) => {
-      return <MenuItem value={modelType.model}>{modelType.key}</MenuItem>
+      return <MenuItem key={modelType.key} value={modelType.model}>{modelType.key}</MenuItem>
     })
   )
 
@@ -108,19 +108,6 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
             {ModelTypeList}
           </Select>
         </FormControl>
-
-        {/* <FormControl>
-          <FormLabel id="demo-radio-buttons-group-label">Model</FormLabel>
-          <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue={model}
-            name="radio-buttons-group"
-            onChange={handleModelRadioButton}
-            style={{ marginTop: '1em' }}
-          >
-            {ModelTypeList}
-          </RadioGroup>
-        </FormControl> */}
       </div>
     </Box>
   );

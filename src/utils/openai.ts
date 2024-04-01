@@ -23,6 +23,7 @@ const openAIUtils = {
       model,
       messages: message,
       temperature: 0.7,
+      stream: true,
     });
     return stream;
   },

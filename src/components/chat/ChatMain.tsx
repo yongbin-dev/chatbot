@@ -5,12 +5,19 @@ import ChatCard from "./ChatCard";
 import { deleteChatMessage } from "@/redux/slices/chat";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
+type CurrentChat = {
+  id: number;
+  question: string;
+  answer: string;
+}
+
 interface Props {
   chatId: string
   chatMessage: ChatCompletionMessageParam[];
+  currentMessage: CurrentChat | undefined
 }
 
-const ChatMain = ({ chatId, chatMessage }: Props) => {
+const ChatMain = ({ chatId, chatMessage, currentMessage }: Props) => {
   const dispatch = useDispatch();
 
   const handleDeleteButton = (messageIndex: number) => {
@@ -38,6 +45,18 @@ const ChatMain = ({ chatId, chatMessage }: Props) => {
             </div>
           );
         })}
+
+        {currentMessage && (
+          <div>
+            <ChatCard
+              question={currentMessage.question}
+              answer={currentMessage.answer}
+              messageId={currentMessage.id}
+              handleDeleteButton={handleDeleteButton}
+            />
+          </div>
+        )}
+
       </Container>
     </>
   );

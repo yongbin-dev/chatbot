@@ -25,7 +25,7 @@ const ChatFooter = ({ handleQuestionButton }: Props) => {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.ctrlKey && e.key === "Enter") {
+    if (e.key === "Enter") {
       e.preventDefault();
       onClickQuestionButton();
     }
@@ -57,7 +57,7 @@ const ChatFooter = ({ handleQuestionButton }: Props) => {
 
         <div className={classes.button_wrapper}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Checkbox {...label} defaultChecked color="success" onChange={handleOnChange} checked={isPic} />
+            <Checkbox {...label} color="success" onChange={handleOnChange} checked={isPic} />
             <span style={{ color: "grey" }}>사진으로 보기</span>
           </div>
           {/* <Button
