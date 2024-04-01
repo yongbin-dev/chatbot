@@ -28,6 +28,7 @@ const ChatMain = ({ chatId, chatMessage, currentMessage }: Props) => {
     dispatch(deleteChatMessage(data))
   }
 
+
   return (
     <>
       <Container>
@@ -35,12 +36,23 @@ const ChatMain = ({ chatId, chatMessage, currentMessage }: Props) => {
           if (index == 0) return;
           return (
             <div key={index}>
-              <ChatCard
-                question={i.message.content}
-                answer={i.answer}
-                messageId={index}
-                handleDeleteButton={handleDeleteButton}
-              />
+              {i?.isPic == true ?
+                <ChatCard
+                  question={i.message.content}
+                  isPic={i.isPic}
+                  answer={i.picUrl}
+                  messageId={index}
+                  handleDeleteButton={handleDeleteButton}
+                />
+                :
+                <ChatCard
+                  question={i.message.content}
+                  answer={i.answer}
+                  messageId={index}
+                  handleDeleteButton={handleDeleteButton}
+                />
+              }
+
               <br />
             </div>
           );

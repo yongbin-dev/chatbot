@@ -36,8 +36,7 @@ const openAIUtils = {
       n: 1,
     });
 
-    console.log(stream.data[0].url);
-    // image_url = stream.data[0].url
+    return stream;
   },
 };
 
