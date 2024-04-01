@@ -95,9 +95,8 @@ export const chatSlice = createSlice({
       if (!chat) return;
 
       const message = action.payload.message;
-      const result = action.payload.result;
-      const answer = result.choices[0].message.content;
-      const usage = result.usage;
+      const answer = action.payload.result;
+      const usage = action.payload.usage;
 
       const data = {
         message,

@@ -6,7 +6,7 @@
   border-color: #1a7f64;
   border-radius: 25px;
   height: 100px;
-  margin-bottom: 5px;
+  margin-bottom: 1em;
   padding: 20px;
   justify-content: space-between;
 }
@@ -29,6 +29,7 @@
 }
 
 .textarea_input {
+  overflow: hidden;
   height: 20px;
   resize: none;
   border: none;
