@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { RootState } from "@/redux/store";
-import { addChatMessage, initChatMessage } from "@redux/slices/chat";
+import { addChatMessage, addChatPic, initChatMessage } from "@redux/slices/chat";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -11,6 +11,7 @@ import ChatFooter from "@/components/chat/ChatFooter";
 import ChatMain from "@/components/chat/ChatMain";
 import CommonAlert from "@/components/common/CommonAlert";
 import openAIUtils from "@/utils/openai";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 
 type CurrentChat = {
@@ -39,7 +40,27 @@ const ChatContainer = ({ chatId }: Props) => {
     }
 
     if (isPic) {
-      await openAIUtils.sendQuestionImageGeneration("무서운 강아지 사진 보여줘");
+
+      setLoading(true);
+      const stream = await openAIUtils.sendQuestionImageGeneration(inputValue);
+
+      const msg: ChatCompletionMessageParam = {
+        role: "user",
+        content: inputValue,
+      };
+
+      const data = {
+        id: chatId,
+        message: msg,
+        result: "",
+        isPic: true,
+        picUrl: stream.data[0].url
+      };
+
+      setLoading(false);
+      dispatch(addChatPic(data));
+      moveScroll();
+
     } else {
 
       const newMessage = chatMessage.map((i: any) => {
@@ -53,25 +74,22 @@ const ChatContainer = ({ chatId }: Props) => {
 
       newMessage.push(msg);
 
-
       setLoading(true);
       const result = await openAIUtils.sendQuestion(newMessage, model, false);
 
       let answerStream = "";
-      for await (const chunk of result) {
 
+      for await (const chunk of result) {
         if (chunk.choices[0]?.delta?.content) {
           answerStream += chunk.choices[0]?.delta?.content;
         }
-
-
         const currentChat: CurrentChat = {
           id: parseInt(chatId),
           question: inputValue,
           answer: answerStream
         }
-
         setResult(currentChat);
+        moveScroll();
       }
 
       const data = {
@@ -84,6 +102,9 @@ const ChatContainer = ({ chatId }: Props) => {
       setLoading(false);
       dispatch(addChatMessage(data));
     }
+
+
+
   };
 
   const handleInitButton = () => {
@@ -91,23 +112,22 @@ const ChatContainer = ({ chatId }: Props) => {
     dispatch(initChatMessage({ id: chat_id }));
   };
 
-  useEffect(() => {
-    if (loading == true) return;
+  const moveScroll = () => {
     const mainDiv = document.getElementById('mainDiv');
     if (!mainDiv) return;
-    mainDiv.scrollTop = mainDiv.scrollHeight + 1000;
-  }, [loading])
+    mainDiv.scrollTop = mainDiv.scrollHeight + 9999;
+  }
 
   return (
     <>
-      {/* <Backdrop
+      <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
       >
         <CircularProgress color="inherit" />
-      </Backdrop> */}
+      </Backdrop>
 
-      <div id={"mainDiv"} style={{ marginTop: "20px", width: "100%", height: "80vh", overflowY: "scroll" }}>
+      <div id={"mainDiv"} style={{ marginTop: "20px", width: "100%", height: "75vh", overflowY: "auto" }}>
         <ChatMain chatId={chatId} chatMessage={chatMessage} currentMessage={result} />
       </div>
 

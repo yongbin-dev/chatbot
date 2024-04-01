@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
 
 export interface ChatState {
   chats: [
@@ -28,6 +29,8 @@ const initialState: ChatState = {
             content: "친구랑 대화하듯 답변해주세요.",
           },
           answer: "",
+          isPic: false,
+          picUrl: "",
           date: "",
         },
       ],
@@ -49,7 +52,7 @@ export const chatSlice = createSlice({
       const title = action.payload.title;
       const idArr = state.chats.map((i: any) => i.id);
       const maxID = Math.max(...idArr);
-
+      const today = dayjs().format();
       let id = maxID + 1;
 
       const chat = {
@@ -70,7 +73,7 @@ export const chatSlice = createSlice({
           prompt_tokens: 0,
           total_tokens: 0,
         },
-        createDate: "",
+        createDate: today,
       };
 
       state.chats.push(chat);
@@ -97,13 +100,35 @@ export const chatSlice = createSlice({
       const message = action.payload.message;
       const answer = action.payload.result;
       const usage = action.payload.usage;
+      const today = dayjs().format();
 
       const data = {
         message,
         answer,
         usage,
         token: 0,
-        date: "",
+        date: today,
+      };
+
+      chat.chatMessage.push(data);
+    },
+    addChatPic: (state, action) => {
+      const chat = state.chats.filter((i: any) => i.id == action.payload.id)[0];
+      if (!chat) return;
+
+      const message = action.payload.message;
+      const isPic = action.payload.isPic;
+      const picUrl = action.payload.picUrl;
+      // const answer = action.payload.result;
+      // const usage = action.payload.usage;
+      const today = dayjs().format();
+
+      const data = {
+        message,
+        isPic,
+        picUrl,
+        token: 0,
+        date: today,
       };
 
       chat.chatMessage.push(data);
@@ -125,6 +150,7 @@ export const {
   deleteChat,
   initChatMessage,
   addChatMessage,
+  addChatPic,
   deleteChatMessage,
 } = chatSlice.actions;
 export default chatSlice.reducer;
