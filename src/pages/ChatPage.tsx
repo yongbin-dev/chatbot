@@ -1,5 +1,5 @@
 import ChatDrawer from '@/components/chat/ChatDrawer';
-import ChatContainer from '@/container/chat/ChatContainer';
+import ChatContainer from '@/container/ChatContainer';
 import MainLayout from '@layouts/MainLayout';
 
 import { IconButton } from "@mui/material";

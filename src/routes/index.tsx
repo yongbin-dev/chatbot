@@ -39,6 +39,30 @@ export default function Router() {
         { element: <Chat />, index: true },
       ],
     },
+    {
+      path: 'login',
+      children: [
+        { element: <Login />, index: true },
+      ],
+    },
+    {
+      path: '*',
+      // element: <LogoOnlyLayout />,
+      children: [
+        { path: '500', element: <Page500 /> },
+        { path: '404', element: <Page404 /> },
+        { path: '*', element: <Navigate to="/404" replace /> },
+      ],
+    },
+  ]);
+}
+
+// AUTHENTICATION
+const Chat = Loadable(lazy(() => import('@pages/ChatPage')));
+const Login = Loadable(lazy(() => import('@pages/LoginPage')));
+
+
+
 
     // {
     //   path: 'auth',
@@ -147,27 +171,6 @@ export default function Router() {
     //     { path: 'kanban', element: <Kanban /> },
     //   ],
     // },
-
-    // // Main Routes
-    {
-      path: '*',
-      // element: <LogoOnlyLayout />,
-      children: [
-        // { path: 'coming-soon', element: <ComingSoon /> },
-        // { path: 'maintenance', element: <Maintenance /> },
-        // { path: 'pricing', element: <Pricing /> },
-        // { path: 'payment', element: <Payment /> },
-        { path: '500', element: <Page500 /> },
-        { path: '404', element: <Page404 /> },
-        { path: '*', element: <Navigate to="/404" replace /> },
-      ],
-    },
-  ]);
-}
-
-// AUTHENTICATION
-const Chat = Loadable(lazy(() => import('@pages/ChatPage')));
-
 
 // const Register = Loadable(lazy(() => import('../pages/auth/Register')));
 // const ResetPassword = Loadable(lazy(() => import('../pages/auth/ResetPassword')));
