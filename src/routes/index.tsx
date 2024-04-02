@@ -10,9 +10,9 @@ import { Navigate, useLocation, useRoutes } from 'react-router-dom';
 // config
 // import { PATH_AFTER_LOGIN } from '../config';
 // components
-import LoadingScreen from '@components/LoadingScreen';
-import Page500 from '@/pages/common/Page500';
 import Page404 from '@/pages/common/Page404';
+import Page500 from '@/pages/common/Page500';
+import LoadingScreen from '@components/LoadingScreen';
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -40,12 +40,6 @@ export default function Router() {
       ],
     },
     {
-      path: 'login',
-      children: [
-        { element: <Login />, index: true },
-      ],
-    },
-    {
       path: '*',
       // element: <LogoOnlyLayout />,
       children: [
@@ -59,7 +53,6 @@ export default function Router() {
 
 // AUTHENTICATION
 const Chat = Loadable(lazy(() => import('@pages/ChatPage')));
-const Login = Loadable(lazy(() => import('@pages/LoginPage')));
 
 
 

@@ -7,9 +7,8 @@ function App() {
   const loginContext = useContext(AuthContext);
   const isLogin = loginContext?.isLogin;
 
-  console.log(isLogin)
   if (isLogin == false) {
-    return <LoginPage/>;
+    return <LoginPage />;
   }
 
   return <Router />;
