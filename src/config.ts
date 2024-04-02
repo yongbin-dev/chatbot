@@ -7,6 +7,11 @@
 export const HOST_API = import.meta.env.VITE_HOST_API;
 export const OPEN_API = import.meta.env.VITE_OPEN_API_KEY;
 
+
+// LOGIN
+export const ADMIN_ID = import.meta.env.VITE_ADMIN_ID;
+export const ADMIN_PW = import.meta.env.VITE_ADMIN_PASSWORD;
+
 // export const FIREBASE_API = {
 //   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
 //   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
