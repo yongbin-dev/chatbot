@@ -40,9 +40,7 @@ const ChatPage = () => {
         onClickChat={onClickChat}
       />
 
-      {
-        <ChatContainer chatId={chatId} />
-      }
+      <ChatContainer chatId={chatId} />
 
     </MainLayout>
   )
