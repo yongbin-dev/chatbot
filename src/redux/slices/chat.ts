@@ -6,40 +6,42 @@ export interface ChatState {
     {
       id: number;
       title: string;
-      chatMessage: any;
+      message: any;
       usage: {
         completion_tokens: number;
         prompt_tokens: number;
         total_tokens: number;
       };
+      isPic : boolean;
+      pic_message? : any;
       createDate: string;
+      modifyDate: string;
     }
   ];
 }
+
+// isPic: false,
+// picUrl: "",
+// date: "", 
 
 const initialState: ChatState = {
   chats: [
     {
       id: 0,
       title: "sample",
-      chatMessage: [
-        {
-          message: {
-            role: "user",
-            content: "친구랑 대화하듯 답변해주세요.",
-          },
-          answer: "",
-          isPic: false,
-          picUrl: "",
-          date: "",
-        },
-      ],
+      message: [{
+        role: "system",
+        content: "친구랑 대화하듯 답변해주세요.",
+      }],
       usage: {
         completion_tokens: 0,
         prompt_tokens: 0,
         total_tokens: 0,
       },
+      isPic : false,
+      pic_message : [] ,
       createDate: "",
+      modifyDate : "",
     },
   ],
 };
@@ -49,31 +51,28 @@ export const chatSlice = createSlice({
   initialState,
   reducers: {
     addChat: (state, action) => {
-      const title = action.payload.title;
+      const title : string  = action.payload.title;
+      const isPic : boolean = action.payload.isPic;
       const idArr = state.chats.map((i: any) => i.id);
-      const maxID = Math.max(...idArr);
+      const maxID = idArr.length == 0 ? 0 : Math.max(...idArr);
       const today = dayjs().format();
       let id = maxID + 1;
 
       const chat = {
         id,
-        title: title,
-        chatMessage: [
-          {
-            message: {
-              role: "user",
-              content: "친구랑 대화하듯 답변해주세요.",
-            },
-            answer: "",
-            date: "",
-          },
-        ],
+        title,
+        message: [{
+          role: "system",
+          content: "친구랑 대화하듯 답변해주세요.",
+        }],
         usage: {
           completion_tokens: 0,
           prompt_tokens: 0,
           total_tokens: 0,
         },
+        isPic,
         createDate: today,
+        modifyDate: today
       };
 
       state.chats.push(chat);
@@ -91,47 +90,28 @@ export const chatSlice = createSlice({
     },
     initChatMessage: (state, action) => {
       const chat = state.chats.filter((i: any) => i.id == action.payload.id)[0];
-      chat.chatMessage = initialState.chats[0].chatMessage;
+      chat.message = initialState.chats[0].message;
     },
     addChatMessage: (state, action) => {
       const chat = state.chats.filter((i: any) => i.id == action.payload.id)[0];
       if (!chat) return;
 
       const message = action.payload.message;
-      const answer = action.payload.result;
-      const usage = action.payload.usage;
+      // const usage = action.payload.usage;
       const today = dayjs().format();
 
-      const data = {
-        message,
-        answer,
-        usage,
-        token: 0,
-        date: today,
-      };
-
-      chat.chatMessage.push(data);
+      chat.modifyDate = today;
+      chat.message = message;
     },
     addChatPic: (state, action) => {
       const chat = state.chats.filter((i: any) => i.id == action.payload.id)[0];
       if (!chat) return;
 
-      const message = action.payload.message;
-      const isPic = action.payload.isPic;
-      const picUrl = action.payload.picUrl;
-      // const answer = action.payload.result;
-      // const usage = action.payload.usage;
+      const pic_messaage = action.payload.pic_messaage;
       const today = dayjs().format();
 
-      const data = {
-        message,
-        isPic,
-        picUrl,
-        token: 0,
-        date: today,
-      };
-
-      chat.chatMessage.push(data);
+      chat.pic_message = pic_messaage;
+      chat.modifyDate = today;
     },
     deleteChatMessage: (state, action) => {
       const chatId = action.payload.chatId;
@@ -139,7 +119,11 @@ export const chatSlice = createSlice({
 
       const chat = state.chats.filter((i: any) => i.id == chatId)[0];
 
-      chat.chatMessage.splice(messageIndex, 1);
+      if(chat.isPic == true){
+        chat.pic_message.splice(messageIndex, 1);  
+      }else{
+        chat.message.splice(messageIndex, 2);
+      }
     },
   },
 });

@@ -4,20 +4,19 @@ import Typography from '@mui/material/Typography';
 import CustomMarkdown from '../common/CommonMarkdown';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 
 interface Props {
-  question: string,
-  answer: string,
+  question : any,
+  answer : any,
   messageId: number,
-  isPic?: boolean,
   handleDeleteButton: (id: number) => void;
 }
 
-const ChatCard = ({ question, isPic, answer, messageId, handleDeleteButton }: Props) => {
+const ChatCard = ({ question , answer , messageId, handleDeleteButton }: Props) => {
 
   const onClickDeleteButton = () => {
-    if (!messageId) return;
+    if (messageId == null) return;
     handleDeleteButton(messageId);
   }
 
@@ -30,21 +29,9 @@ const ChatCard = ({ question, isPic, answer, messageId, handleDeleteButton }: Pr
             <DeleteIcon />
           </IconButton>
         </Typography>
-        {
-          isPic == true ?
-            <Box
-              component="img"
-              sx={{
-                height: 250,
-                width: 250,
-              }}
-              src={answer}
-            />
-            :
-            <Typography variant="body2">
-              <CustomMarkdown text={answer} />
-            </Typography>
-        }
+        <Typography variant="body2">
+          <CustomMarkdown text={answer} />
+        </Typography>
       </CardContent>
     </Card>
   );

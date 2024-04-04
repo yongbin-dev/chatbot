@@ -4,6 +4,7 @@ import { changeModel } from '@/redux/slices/model';
 import { RootState } from "@/redux/store";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ChatIcon from '@mui/icons-material/Chat';
+import PhotoIcon from '@mui/icons-material/Photo';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -83,7 +84,11 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
               <ListItemButton onClick={
                 () => { handleIconButton(chat.id) }}>
                 <ListItemIcon>
-                  <ChatIcon />
+                  {
+                    chat.isPic == true ? 
+                    <PhotoIcon /> :
+                    <ChatIcon /> 
+                  }
                 </ListItemIcon>
                 <ListItemText primary={chat.title} />
               </ListItemButton>
