@@ -2,12 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export interface ModelState {
   model: string;
-  isPic: boolean;
 }
 
 const initialState: ModelState = {
   model: "gpt-3.5-turbo",
-  isPic: false,
 };
 
 export const modelSlice = createSlice({
@@ -16,15 +14,7 @@ export const modelSlice = createSlice({
   reducers: {
     changeModel: (state, action) => {
       const model = action.payload.model;
-      const isPic = action.payload.isPic;
-
-      if (model) {
-        state.model = model;
-      }
-
-      if (isPic != null) {
-        state.isPic = isPic;
-      }
+      state.model = model;
     },
   },
 });

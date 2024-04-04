@@ -25,7 +25,7 @@
 .button_wrapper {
   align-items: center;
   display: flex;
-  justify-content: space-between;
+  justify-content : flex-end;
 }
 
 .textarea_input {
