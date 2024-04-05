@@ -28,7 +28,6 @@ const ChatMain = ({
 }: Props) => {
   const dispatch = useDispatch();
   const handleDeleteButton = (messageIndex: number) => {
-    debugger
     const data = {
       chatId,
       messageIndex,
