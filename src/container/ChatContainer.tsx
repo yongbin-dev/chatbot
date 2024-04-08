@@ -40,7 +40,7 @@ const ChatContainer = ({ chatId }: Props) => {
       return <CommonAlert msg={"질문"}></CommonAlert>;
     }
 
-    if (chat.isPic == true ) {
+    if (chat.isPic == true) {
       createPicChat(inputValue);
     } else {
       createChat(inputValue);
@@ -50,15 +50,15 @@ const ChatContainer = ({ chatId }: Props) => {
   const createPicChat = async (inputValue: string) => {
     setLoading(true);
 
-    
+
     const pic_message = chat.pic_message ? [...chat.pic_message] : [];
     const newMessage = pic_message;
 
     const stream = await openAIUtils.sendQuestionImageGeneration(inputValue);
 
     newMessage.push({
-        question: inputValue,
-        answer: stream.data[0].url,
+      question: inputValue,
+      answer: stream.data[0].url,
     })
 
     const data = {
@@ -72,6 +72,11 @@ const ChatContainer = ({ chatId }: Props) => {
   };
 
   const createChat = async (inputValue: string) => {
+    if (!chat.message) {
+      alert('채팅방을 선택해주세요!');
+      return;
+    }
+
     const newMessage = [...chat.message];
 
     const msg: ChatCompletionMessageParam = {
@@ -141,32 +146,32 @@ const ChatContainer = ({ chatId }: Props) => {
             style={{
               marginTop: "20px",
               width: "100%",
-              height: "75vh",
+              height: "100%",
               overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            <ChatMain
-              chatId={chatId}
-              chatMessage={chat.message}
-              currentMessage={result}
-              isPic={chat.isPic}
-              picMessage={chat.pic_message}
-            />
+            <div  >
+              <ChatMain
+                chatId={chatId}
+                chatMessage={chat.message}
+                currentMessage={result}
+                isPic={chat.isPic}
+                picMessage={chat.pic_message}
+              />
+            </div>
+
+            <div style={{ marginBottom: "20px;" }}>
+              <ChatFooter
+                handleQuestionButton={handleQuestionButton}
+                handleInitButton={handleInitButton}
+              />
+            </div>
+
           </div>
 
-          <div
-            style={{
-              width: "100%",
-              minHeight: "10vh",
-              position: "absolute",
-              bottom: "0",
-            }}
-          >
-            <ChatFooter
-              handleQuestionButton={handleQuestionButton}
-              handleInitButton={handleInitButton}
-            />
-          </div>
+
         </>
       )}
     </>
