@@ -36,7 +36,7 @@ const ChatMain = ({
   };
 
   const makeChatPicCard = (message: any) => {
-    return message.map((chat: any, index: number) => {
+    return message && message.map((chat: any, index: number) => {
       return (
         <div key={index}>
           <ChatPicCard
@@ -51,18 +51,18 @@ const ChatMain = ({
   };
 
   const makeChatChard = (message: any) => {
-    return message.map((chat: any, index: number) => {
+    return message && message.map((chat: any, index: number) => {
       if (chat.role == "assistant") {
         return (
-            <div key={index}>
-              <ChatCard
-                question={message[index - 1].content}
-                answer={message[index].content}
-                messageId={index}
-                handleDeleteButton={handleDeleteButton}
-              />
-              <br />
-            </div>
+          <div key={index}>
+            <ChatCard
+              question={message[index - 1].content}
+              answer={message[index].content}
+              messageId={index}
+              handleDeleteButton={handleDeleteButton}
+            />
+            <br />
+          </div>
         );
       }
     });
