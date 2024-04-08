@@ -7,24 +7,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
 
 interface Props {
-  question : any,
-  answer : any,
+  question: any,
+  answer: any,
   messageId: number,
   handleDeleteButton: (id: number) => void;
 }
 
-const ChatCard = ({ question , answer , messageId, handleDeleteButton }: Props) => {
+const ChatCard = ({ question, answer, messageId, handleDeleteButton }: Props) => {
 
   const onClickDeleteButton = () => {
     if (messageId == null) return;
     handleDeleteButton(messageId);
   }
 
+
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography variant="h5" component="div">
-          <b>{question} </b>
+          <b>{question.length > 20 ? question.substring(0, 20) : question}  </b>
           <IconButton aria-label="delete" onClick={onClickDeleteButton}>
             <DeleteIcon />
           </IconButton>
