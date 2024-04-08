@@ -18,8 +18,26 @@ const ChatFooter = ({ handleQuestionButton }: Props) => {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
+    const textDiv = document.getElementById('chatTextArea');
+
+    if (!textDiv) {
+      return;
+    }
+
+    e.preventDefault();
     if (e.key === "Enter") {
-      e.preventDefault();
+      if (textDiv.clientHeight <= 300) {
+        textDiv.style.height = textDiv.clientHeight + 'px';
+      }
+    };
+
+    if (e.keyCode == 46 || e.keyCode == 8) {
+      if (textDiv.clientHeight >= 180) {
+        textDiv.style.height = textDiv.clientHeight - 80 + 'px';
+      }
+    }
+
+    if (e.ctrlKey && e.key === "Enter") {
       onClickQuestionButton();
     }
   };
@@ -33,7 +51,7 @@ const ChatFooter = ({ handleQuestionButton }: Props) => {
 
   return (
     <Container>
-      <div className={classes.question_wrapper}>
+      <div className={classes.question_wrapper} id={"chatTextArea"}>
         <div className={classes.textarea_wrapper}>
           <textarea
             className={classes.textarea_input}
