@@ -142,17 +142,22 @@ const ChatContainer = ({ chatId }: Props) => {
       {chat && (
         <>
           <div
-            id={"mainDiv"}
             style={{
-              marginTop: "20px",
               width: "100%",
               height: "100%",
-              overflowY: "auto",
               display: "flex",
               flexDirection: "column",
+              overflow: "auto"
             }}
           >
-            <div  >
+            <div
+              id={"mainDiv"}
+              style={{
+                height: "70%",
+                marginTop: "20px",
+                overflowY: "auto",
+              }}
+            >
               <ChatMain
                 chatId={chatId}
                 chatMessage={chat.message}
@@ -162,7 +167,7 @@ const ChatContainer = ({ chatId }: Props) => {
               />
             </div>
 
-            <div style={{ marginBottom: "20px;" }}>
+            <div style={{ marginBottom: "20px", position: "absolute", bottom: 0, width: "100%" }}>
               <ChatFooter
                 handleQuestionButton={handleQuestionButton}
                 handleInitButton={handleInitButton}
@@ -173,7 +178,8 @@ const ChatContainer = ({ chatId }: Props) => {
 
 
         </>
-      )}
+      )
+      }
     </>
   );
 };
