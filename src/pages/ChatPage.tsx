@@ -2,16 +2,19 @@ import ChatDrawer from '@/components/chat/ChatDrawer';
 import ChatContainer from '@/container/ChatContainer';
 import MainLayout from '@layouts/MainLayout';
 
+import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from "@mui/material";
 
+import { deleteAllChatMessage } from '@/redux/slices/chat';
 import { RootState } from '@/redux/store';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ChatPage = () => {
 
   const { chats } = useSelector((state: RootState) => state.chat);
+  const dispatch = useDispatch();
   const [chatId, setChatId] = useState<string>("0");
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
 
@@ -23,6 +26,14 @@ const ChatPage = () => {
     setChatId(chatId)
   }
 
+  const handleAllDeleteButton = () => {
+    const data = {
+      chatId
+    }
+
+    dispatch(deleteAllChatMessage(data));
+  }
+
 
   return (
     <MainLayout>
@@ -30,6 +41,12 @@ const ChatPage = () => {
       <div style={{ position: "absolute", top: "10px", left: "10px" }}>
         <IconButton onClick={handleIconButtonClick}>
           <DensityMediumIcon />
+        </IconButton>
+      </div >
+
+      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <IconButton aria-label="delete" size="large">
+          <DeleteIcon fontSize="small" onClick={handleAllDeleteButton} />
         </IconButton>
       </div >
 
