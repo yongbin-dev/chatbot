@@ -125,6 +125,17 @@ export const chatSlice = createSlice({
         chat.message.splice(messageIndex, 2);
       }
     },
+    deleteAllChatMessage:(state,action) => {
+      const chatId = action.payload.chatId;
+      
+      const chat = state.chats.filter((i: any) => i.id == chatId)[0];
+
+      if(chat.isPic == true){
+        chat.pic_message.splice(1);  
+      }else{
+        chat.message.splice(1);
+      }
+    }
   },
 });
 
@@ -136,5 +147,6 @@ export const {
   addChatMessage,
   addChatPic,
   deleteChatMessage,
+  deleteAllChatMessage
 } = chatSlice.actions;
 export default chatSlice.reducer;
