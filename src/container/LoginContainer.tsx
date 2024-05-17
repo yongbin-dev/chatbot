@@ -10,9 +10,11 @@ const LoginContainer = () => {
 
   const authContext = useContext(AuthContext);
   const navigate = useNavigate()
-  const onClickLogin = (id : string , pw : string) => {
 
+  const onClickLogin = (id : string , pw : string) => {
     if(id == ADMIN_ID && pw == ADMIN_PW){
+      let date = new Date(Date.now() + 86400e3);
+      document.cookie = "login=true; expires=" + date;
       authContext?.setIsLogin(true);
       navigate("/");
     }
