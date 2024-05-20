@@ -15,7 +15,7 @@ const ChatPage = () => {
 
   const { chats } = useSelector((state: RootState) => state.chat);
   const dispatch = useDispatch();
-  const [chatId, setChatId] = useState<string>("0");
+  const [chatId, setChatId] = useState<string>(chats[0].id ? chats[0].id.toString()  : "0");
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
 
   const handleIconButtonClick = () => {
