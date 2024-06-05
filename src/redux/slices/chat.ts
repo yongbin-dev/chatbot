@@ -50,6 +50,14 @@ export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    changeSystemMessage : (state ,action) => {
+      const chatId : number = action.payload.chatId;
+      const systemMessage : string = action.payload.message;
+
+      const chat = state.chats.filter(i => i.id == chatId)[0]
+      chat.message[0].content = systemMessage;
+
+    },
     addChat: (state, action) => {
       const title : string  = action.payload.title;
       const isPic : boolean = action.payload.isPic;
@@ -141,6 +149,7 @@ export const chatSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  changeSystemMessage,
   addChat,
   deleteChat,
   initChatMessage,
