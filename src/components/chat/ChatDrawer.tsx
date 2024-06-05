@@ -1,5 +1,5 @@
 import { model_type_list as modelType } from "@/data/model-type";
-import { deleteChat } from '@/redux/slices/chat';
+import { changeSystemMessage, deleteChat } from '@/redux/slices/chat';
 import { changeModel } from '@/redux/slices/model';
 import { RootState } from "@/redux/store";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -18,6 +18,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChatDialog from './ChatDialog';
 import style from "./style/chat.module.css";
+import BuildIcon from '@mui/icons-material/Build';
+import ChatSystemMessageDialog from "./ChatSystemMessageDialog";
 
 interface Props {
   isOpen?: boolean,
@@ -28,9 +30,10 @@ interface Props {
 
 export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onClickChat }: Props) {
 
+  const [chatId , setChatId]  =  useState<number>();
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+  const [isOpenChangeDialog, setIsOpenChangeDialog] = useState<boolean>(false);
   const { model } = useSelector((state: RootState) => state.model);
-
 
   const dispatch = useDispatch();
 
@@ -43,7 +46,7 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
   }
 
   const handlePlusButton = () => {
-    setIsOpenDialog(true);
+    setIsOpenChangeDialog(true);
   }
 
   const handleDeleteButton = (id: number) => {
@@ -53,13 +56,27 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
     dispatch(deleteChat(data))
   }
 
+  const handleChangeButton = (id: number) => {
+    setChatId(id)
+    setIsOpenChangeDialog(true);
+  }
+
+  const onChangeMessage = (message : string) => {
+    const data = {
+      chatId : chatId,
+      message: message,
+    }
+
+    dispatch(changeSystemMessage(data));
+    setIsOpenDialog(false);
+  }
+
 
   const handleChange = (event: SelectChangeEvent) => {
     const model = event.target.value;
     if (!model) return;
     dispatch(changeModel({ model }))
   };
-
 
 
   const ModelTypeList = (
@@ -92,6 +109,10 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
                 </ListItemIcon>
                 <ListItemText primary={chat.title} />
               </ListItemButton>
+
+              <ListItemIcon onClick={() => { handleChangeButton(chat.id) }}>
+                <BuildIcon />
+              </ListItemIcon>
 
               <ListItemIcon onClick={() => { handleDeleteButton(chat.id) }}>
                 <DeleteIcon />
@@ -128,6 +149,14 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen, onCli
         setIsOpenDialog={setIsOpenDialog}
         title={"채팅 추가하시겠습니까?"}
       />
+      
+      <ChatSystemMessageDialog
+        onSave={onChangeMessage}
+        isOpenDialog={isOpenChangeDialog}
+        setIsOpenDialog={setIsOpenChangeDialog}
+        title={"채팅 추가하시겠습니까?"}
+      />
+
     </div>
   );
 }
