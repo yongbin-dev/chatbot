@@ -31,7 +31,7 @@ const initialState: ChatState = {
       title: "sample",
       message: [{
         role: "system",
-        content: "친구랑 대화하듯 답변해주세요.",
+        content: "",
       }],
       usage: {
         completion_tokens: 0,
