@@ -36,10 +36,7 @@ const ChatPicCard = ({
         </Typography>
         <Box
           component="img"
-          sx={{
-            height: 250,
-            width: 250,
-          }}
+          sx={{ height: 250, width: 250 }}
           src={answer}
         />
       </CardContent>
