@@ -5,7 +5,7 @@ export interface ModelState {
 }
 
 const initialState: ModelState = {
-  model: "gpt-3.5-turbo",
+  model: '',
 };
 
 export const modelSlice = createSlice({

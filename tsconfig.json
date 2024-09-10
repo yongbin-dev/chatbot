@@ -28,6 +28,7 @@
       "@redux/*": ["redux/*"],
       "@layouts/*": ["layouts/*"],
       "@assets/*": ["assets/*"],
+      "@constants/*": ["constants/*"]
     },
     "types": ["vite-plugin-svgr/client"],
   },

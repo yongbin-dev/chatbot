@@ -1,6 +1,8 @@
+import { ModelType } from '@/constants/modelConstants';
+import { Model, model_list } from '@/constants/modelList';
 import { addChat } from '@/redux/slices/chat';
 import CloseIcon from '@mui/icons-material/Close';
-import { Checkbox, Input, Typography } from '@mui/material';
+import { Checkbox, FormControl, Input, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -34,6 +36,25 @@ export default function ChatDialog({ isOpenDialog, setIsOpenDialog }: Props) {
 
   const [value, setValue] = React.useState<string>();
   const [checked , setChecked] = React.useState<boolean>(false);
+  const [model , setModel] = React.useState<string>(ModelType.GPT);
+  
+  const handleChange = (e: SelectChangeEvent) => {
+    setModel(e.target.value)
+  };
+  
+  
+  const ModelTypeList = (
+    model_list.map((modelType: Model) => {
+      return (
+        <MenuItem key={modelType.key} value={modelType.model}>
+          <div style={{ display: 'flex' }}>
+            <img src={modelType.imgUrl} width={24} />
+            <span style={{ marginLeft: '0.5em' }}>{modelType.key}</span>
+          </div>
+        </MenuItem>
+      )
+    })
+  )
 
   const dispatch = useDispatch();
 
@@ -47,7 +68,8 @@ export default function ChatDialog({ isOpenDialog, setIsOpenDialog }: Props) {
 
     const data = {
       title: value,
-      isPic : checked
+      isPic : checked,
+      model : model
     }
 
     dispatch(addChat(data));
@@ -93,9 +115,20 @@ export default function ChatDialog({ isOpenDialog, setIsOpenDialog }: Props) {
             이미지를 검색하고 싶다면 하단 '사진'을 클릭하여 체크해주시기 바랍니다.
           </Typography>
 
-
           <div style={{ display: 'flex', alignItems: 'center' , marginTop: '2em' , float : 'right'}}>
             <div>
+              <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                <InputLabel id="demo-select-small-label">Model</InputLabel>
+                <Select
+                  labelId="demo-select-small-label"
+                  id="demo-select-small"
+                  value={model}
+                  label="Model"
+                  onChange={handleChange}
+                >
+                  {ModelTypeList}
+                </Select>
+              </FormControl>
               <Input onChange={onChangeEvent} placeholder='채팅방 이름' />
             </div>
 

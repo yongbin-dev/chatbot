@@ -15,6 +15,7 @@ import ChatMain from "@/components/chat/ChatMain";
 import CommonAlert from "@/components/common/CommonAlert";
 import openAIUtils from "@/utils/openai";
 import { Backdrop, CircularProgress } from "@mui/material";
+import { ModelType } from "@/constants/modelConstants";
 
 type CurrentChat = {
   id: number;
@@ -48,6 +49,8 @@ const ChatContainer = ({ chatId }: Props) => {
   };
 
   const createPicChat = async (inputValue: string) => {
+    if(chat.model == ModelType.CLAUDE) return;
+
     setLoading(true);
 
 
@@ -63,7 +66,7 @@ const ChatContainer = ({ chatId }: Props) => {
 
     const data = {
       id: chatId,
-      pic_messaage: newMessage,
+      pic_message: newMessage,
     };
 
     setLoading(false);
@@ -86,7 +89,9 @@ const ChatContainer = ({ chatId }: Props) => {
 
     // 질문
     newMessage.push(msg);
-    const result = await openAIUtils.sendQuestion(newMessage, model, false);
+
+    const modelType =  chat.model
+    const result : any = await openAIUtils.sendQuestion(newMessage, modelType ,model, false);
     let answerStream = "";
 
     for await (const chunk of result) {

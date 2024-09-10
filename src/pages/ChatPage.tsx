@@ -14,30 +14,21 @@ import { useDispatch, useSelector } from 'react-redux';
 const ChatPage = () => {
 
   const { chats } = useSelector((state: RootState) => state.chat);
-  const dispatch = useDispatch();
-  const [chatId, setChatId] = useState<string>(chats[0].id ? chats[0].id.toString()  : "0");
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
+  const activeChatId = useSelector((state: RootState) => state.chat.activeChatId);
+  
+  const dispatch = useDispatch();
 
   const handleIconButtonClick = () => {
     setDrawerOpen(!drawerOpen);
   }
 
-  const onClickChat = (chatId: string) => {
-    setChatId(chatId)
-  }
-
   const handleAllDeleteButton = () => {
-    const data = {
-      chatId
-    }
-
-    dispatch(deleteAllChatMessage(data));
+    dispatch(deleteAllChatMessage({chatId : activeChatId}));
   }
-
 
   return (
     <MainLayout>
-
       <div style={{ position: "absolute", top: "10px", left: "10px" }}>
         <IconButton onClick={handleIconButtonClick}>
           <DensityMediumIcon />
@@ -45,8 +36,8 @@ const ChatPage = () => {
       </div >
 
       <div style={{ position: "absolute", top: "10px", right: "10px" }}>
-        <IconButton aria-label="delete" size="large">
-          <DeleteIcon fontSize="small" onClick={handleAllDeleteButton} />
+        <IconButton aria-label="delete" size="large" onClick={handleAllDeleteButton}>
+          <DeleteIcon fontSize="small"/>
         </IconButton>
       </div >
 
@@ -54,11 +45,9 @@ const ChatPage = () => {
         chats={chats}
         isOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}
-        onClickChat={onClickChat}
       />
 
-      <ChatContainer chatId={chatId} />
-
+      <ChatContainer chatId={activeChatId} />
     </MainLayout>
   )
 }
