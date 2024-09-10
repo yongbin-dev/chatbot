@@ -6,6 +6,7 @@
 
 export const HOST_API = import.meta.env.VITE_HOST_API;
 export const OPEN_API = import.meta.env.VITE_OPEN_API_KEY;
+export const CLAUDE_API_KEY = import.meta.env.VITE_CLAUDE_API_KEY;
 
 
 // LOGIN

@@ -1,12 +1,16 @@
+import { ModelType } from "@/constants/modelConstants";
 import { createSlice } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
+
+const PREFIX_ID = "chat-";
 
 export interface ChatState {
   chats: [
     {
-      id: number;
+      id: string;
       title: string;
       message: any;
+      model : ModelType,
       usage: {
         completion_tokens: number;
         prompt_tokens: number;
@@ -17,7 +21,8 @@ export interface ChatState {
       createDate: string;
       modifyDate: string;
     }
-  ];
+  ]
+  activeChatId : string
 }
 
 // isPic: false,
@@ -27,7 +32,7 @@ export interface ChatState {
 const initialState: ChatState = {
   chats: [
     {
-      id: 0,
+      id: PREFIX_ID + 0,
       title: "sample",
       message: [{
         role: "system",
@@ -42,29 +47,40 @@ const initialState: ChatState = {
       pic_message : [] ,
       createDate: "",
       modifyDate : "",
+      model : ModelType.GPT,
     },
   ],
+  activeChatId : PREFIX_ID + 0
 };
 
 export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    setActiveChatId : (state , action) => {
+      state.activeChatId = action.payload;
+    },
     changeSystemMessage : (state ,action) => {
       const chatId : number = action.payload.chatId;
       const systemMessage : string = action.payload.message;
 
-      const chat = state.chats.filter(i => i.id == chatId)[0]
-      chat.message[0].content = systemMessage;
-
+      const chat = state.chats.filter(i => i.id == PREFIX_ID+chatId)[0]
+      chat.message.filter((i : any) => i.role == 'system')[0].content = systemMessage;
     },
     addChat: (state, action) => {
       const title : string  = action.payload.title;
       const isPic : boolean = action.payload.isPic;
-      const idArr = state.chats.map((i: any) => i.id);
+      const model : ModelType = action.payload.model;
+
+      const idArr = state.chats.map((i: any) => {
+        const id : string = i.id;
+        const idNum = Number(id.split('-')[1])
+        return idNum;
+      });
+
       const maxID = idArr.length == 0 ? 0 : Math.max(...idArr);
       const today = dayjs().format();
-      let id = maxID + 1;
+      let id = PREFIX_ID + maxID + 1;
 
       const chat = {
         id,
@@ -79,20 +95,18 @@ export const chatSlice = createSlice({
           total_tokens: 0,
         },
         isPic,
+        model,
         createDate: today,
-        modifyDate: today
+        modifyDate: today,
       };
 
       state.chats.push(chat);
     },
-
     deleteChat: (state, action) => {
       const id = action.payload.id;
-
       state.chats.map((i: any, index: number) => {
         if (i.id == id) {
           state.chats.splice(index, 1);
-          return;
         }
       });
     },
@@ -115,10 +129,10 @@ export const chatSlice = createSlice({
       const chat = state.chats.filter((i: any) => i.id == action.payload.id)[0];
       if (!chat) return;
 
-      const pic_messaage = action.payload.pic_messaage;
+      const pic_message = action.payload.pic_message;
       const today = dayjs().format();
 
-      chat.pic_message = pic_messaage;
+      chat.pic_message = pic_message;
       chat.modifyDate = today;
     },
     deleteChatMessage: (state, action) => {
@@ -156,6 +170,7 @@ export const {
   addChatMessage,
   addChatPic,
   deleteChatMessage,
-  deleteAllChatMessage
+  deleteAllChatMessage,
+  setActiveChatId,
 } = chatSlice.actions;
 export default chatSlice.reducer;

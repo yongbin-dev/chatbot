@@ -31,6 +31,7 @@ export default function ChatSystemMessageDialog({
   isOpenDialog,
   setIsOpenDialog,
 }: Props) {
+
   const [value, setValue] = React.useState<string>();
 
   const handleClose = () => {
@@ -45,6 +46,9 @@ export default function ChatSystemMessageDialog({
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
+
+
+
 
   return (
     <React.Fragment>
@@ -78,12 +82,13 @@ export default function ChatSystemMessageDialog({
               display: "flex",
               alignItems: "center",
               marginTop: "2em",
-              float: "right",
+              width : '100%'
             }}
           >
-            <Input onChange={onChangeEvent} placeholder="채팅방 이름"/>
+            <Input onChange={onChangeEvent}  placeholder="채팅방 시스템 메시지" />
           </div>
         </DialogContent>
+
         <DialogActions>
           <Button onClick={handleClose}>취소</Button>
           <Button onClick={handleSave} autoFocus>
