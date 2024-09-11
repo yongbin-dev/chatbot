@@ -18,7 +18,7 @@ export const model_list : Model[] = [
   {
     key: ModelType.GPT,
     model: ModelType.GPT,
-    imgUrl : "/src/assets/model/gpt.png",
+    imgUrl : "/images/gpt.png",
     children: [
       {
         key: "gpt-4o",
@@ -51,7 +51,7 @@ export const model_list : Model[] = [
   { 
     key: ModelType.CLAUDE ,
     model: ModelType.CLAUDE ,
-    imgUrl : "/src/assets/model/claude.png",
+    imgUrl : "/images/claude.png",
     children : []
   },
 ];
