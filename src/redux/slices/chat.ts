@@ -4,25 +4,28 @@ import dayjs from "dayjs";
 
 const PREFIX_ID = "chat-";
 
+export type ChatType = {
+  id: string;
+  title: string;
+  message: any;
+  model : ModelType,
+  usage: {
+    completion_tokens: number;
+    prompt_tokens: number;
+    total_tokens: number;
+  };
+  isPic : boolean;
+  pic_message? : any;
+  createDate: string;
+  modifyDate: string;
+}
+
 export interface ChatState {
-  chats: [
-    {
-      id: string;
-      title: string;
-      message: any;
-      model : ModelType,
-      usage: {
-        completion_tokens: number;
-        prompt_tokens: number;
-        total_tokens: number;
-      };
-      isPic : boolean;
-      pic_message? : any;
-      createDate: string;
-      modifyDate: string;
-    }
-  ]
-  activeChatId : string
+  chats: ChatType[]
+  activeChat : {
+    id : string , 
+    systemMessage : string
+  }
 }
 
 // isPic: false,
@@ -50,21 +53,31 @@ const initialState: ChatState = {
       model : ModelType.GPT,
     },
   ],
-  activeChatId : PREFIX_ID + 0
+  activeChat : {
+    id : PREFIX_ID + 0,
+    systemMessage : ''
+  }
 };
 
 export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setActiveChatId : (state , action) => {
-      state.activeChatId = action.payload;
+    setActiveChat : (state , action) => {
+      
+      const chatId = action.payload.id;
+      
+      const chat = state.chats.filter(i => i.id == chatId)[0]
+      const systemMessage = chat.message.filter((i : any) => i.role == 'system')[0].content;
+      
+      state.activeChat.id = chatId;
+      state.activeChat.systemMessage = systemMessage;
     },
     changeSystemMessage : (state ,action) => {
-      const chatId : number = action.payload.chatId;
+      const chatId : string = action.payload.chatId;
       const systemMessage : string = action.payload.message;
 
-      const chat = state.chats.filter(i => i.id == PREFIX_ID+chatId)[0]
+      const chat = state.chats.filter(i => i.id == chatId)[0]
       chat.message.filter((i : any) => i.role == 'system')[0].content = systemMessage;
     },
     addChat: (state, action) => {
@@ -171,6 +184,6 @@ export const {
   addChatPic,
   deleteChatMessage,
   deleteAllChatMessage,
-  setActiveChatId,
+  setActiveChat,
 } = chatSlice.actions;
 export default chatSlice.reducer;

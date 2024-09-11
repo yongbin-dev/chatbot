@@ -13,9 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const ChatPage = () => {
 
-  const { chats } = useSelector((state: RootState) => state.chat);
+  const { chats , activeChat } = useSelector((state: RootState) => state.chat);
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
-  const activeChatId = useSelector((state: RootState) => state.chat.activeChatId);
   
   const dispatch = useDispatch();
 
@@ -24,7 +23,7 @@ const ChatPage = () => {
   }
 
   const handleAllDeleteButton = () => {
-    dispatch(deleteAllChatMessage({chatId : activeChatId}));
+    dispatch(deleteAllChatMessage({chatId : activeChat.id}));
   }
 
   return (
@@ -47,7 +46,7 @@ const ChatPage = () => {
         setDrawerOpen={setDrawerOpen}
       />
 
-      <ChatContainer chatId={activeChatId} />
+      <ChatContainer chatId={activeChat.id} />
     </MainLayout>
   )
 }

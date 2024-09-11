@@ -41,6 +41,11 @@ const ChatContainer = ({ chatId }: Props) => {
       return <CommonAlert msg={"질문"}></CommonAlert>;
     }
 
+    if(!model) {
+      alert('모델을 선택해주세요.')
+      return;
+    }
+    
     if (chat.isPic == true) {
       createPicChat(inputValue);
     } else {

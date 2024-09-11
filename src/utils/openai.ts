@@ -36,7 +36,6 @@ const openAIUtils = {
           temperature: 0.7,
           stream: true,
         });
-
         return stream;
       case ModelType.CLAUDE: 
         const msg = await anthropic.messages.create({
@@ -44,8 +43,10 @@ const openAIUtils = {
           max_tokens: 1024,
           messages: [{ role: "user", content: "Hello, Claude" }],
         });
-
         return msg;
+
+      default : 
+        return null;
     } 
 
     return null;
@@ -61,6 +62,10 @@ const openAIUtils = {
 
     return stream;
   },
+
+  getSystemMessage(){
+    return `저는 java 언어를 기반으로 하는 백엔드 개발자입니다.`
+  }
 };
 
 const sliceMessage = (originalMessage: ChatCompletionMessageParam[]) => {

@@ -1,9 +1,9 @@
-import { deleteChatMessage } from "@/redux/slices/chat";
 import { Container } from "@mui/material";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import { useDispatch } from "react-redux";
 import ChatCard from "./ChatCard";
 import ChatPicCard from "./ChatPicCard";
+import { deleteChatMessage } from "@/redux/slices/chat";
 
 type CurrentChat = {
   id: number;

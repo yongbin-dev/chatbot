@@ -1,5 +1,8 @@
+import { RootState, useSelector } from "@/redux/store";
+import openAIUtils from "@/utils/openai";
 import CloseIcon from "@mui/icons-material/Close";
-import { Input, Typography } from "@mui/material";
+import { Textarea } from "@mui/joy";
+import { Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -21,7 +24,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 interface Props {
   onSave: (value: string) => void;
-  title: string;
   isOpenDialog: boolean;
   readonly setIsOpenDialog: (open: boolean) => void;
 }
@@ -32,7 +34,10 @@ export default function ChatSystemMessageDialog({
   setIsOpenDialog,
 }: Props) {
 
-  const [value, setValue] = React.useState<string>();
+  if (!isOpenDialog) return;
+
+  const { activeChat } = useSelector((state: RootState) => state.chat);
+  const [value, setValue] = React.useState<string>(activeChat.systemMessage);
 
   const handleClose = () => {
     setIsOpenDialog(false);
@@ -43,12 +48,14 @@ export default function ChatSystemMessageDialog({
     onSave(value);
   };
 
-  const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeEvent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
 
-
-
+  const handleTemplate = () => {
+    const systemMessageTemplate = openAIUtils.getSystemMessage();
+    setValue(systemMessageTemplate );
+  }
 
   return (
     <React.Fragment>
@@ -57,7 +64,10 @@ export default function ChatSystemMessageDialog({
         aria-labelledby="customized-dialog-title"
         open={isOpenDialog}
       >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+        <DialogTitle 
+          sx={{ m: 0, p: 2 }} 
+          id="customized-dialog-title"
+        >
           채팅방 시스템 메시지 설정
         </DialogTitle>
         <IconButton
@@ -76,22 +86,45 @@ export default function ChatSystemMessageDialog({
           <Typography gutterBottom>
             선택한 해당 채팅방의 초기 시스템 메시지를 입력해주세요 <br />
           </Typography>
-
           <div
             style={{
               display: "flex",
               alignItems: "center",
               marginTop: "2em",
-              width : '100%'
+              width: '100%',
+              height: '300px',
             }}
           >
-            <Input onChange={onChangeEvent}  placeholder="채팅방 시스템 메시지" />
+            <Textarea
+              style={{
+                height: '100%',
+                width: '100%',
+              }}
+              onChange={onChangeEvent}
+              placeholder="채팅방 시스템 메시지"
+              value={value}
+            />
           </div>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleClose}>취소</Button>
-          <Button onClick={handleSave} autoFocus>
+          
+          <Button 
+            variant="contained" 
+            onClick={handleTemplate}
+          >
+            Template
+          </Button>
+
+          <Button
+            onClick={handleClose}
+          >
+            취소
+          </Button>
+          <Button
+            onClick={handleSave}
+            autoFocus
+          >
             저장
           </Button>
         </DialogActions>

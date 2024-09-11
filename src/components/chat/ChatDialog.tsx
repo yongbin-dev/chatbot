@@ -27,7 +27,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 interface Props {
-  title: string,
   isOpenDialog: boolean
   readonly setIsOpenDialog: (open: boolean) => void;
 }
