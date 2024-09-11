@@ -1,6 +1,4 @@
 import { ModelDetail, model_list } from "@/constants/modelList";
-import { changeSystemMessage, deleteChat, setActiveChatId } from '@/redux/slices/chat';
-import { changeModel } from '@/redux/slices/model';
 import { RootState } from "@/redux/store";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import BuildIcon from '@mui/icons-material/Build';
@@ -19,6 +17,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ChatDialog from './ChatDialog';
 import ChatSystemMessageDialog from "./ChatSystemMessageDialog";
 import style from "./style/chat.module.css";
+import { ChatType, changeSystemMessage, deleteChat, setActiveChat } from "@/redux/slices/chat";
+import { changeModel } from "@/redux/slices/model";
 
 interface Props {
   isOpen?: boolean,
@@ -27,11 +27,12 @@ interface Props {
 }
 
 export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Props) {
+  
+  const { model } = useSelector((state: RootState) => state.model);
+  const { activeChat } = useSelector((state: RootState) => state.chat);
 
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
   const [isOpenChangeDialog, setIsOpenChangeDialog] = useState<boolean>(false);
-  const { model } = useSelector((state: RootState) => state.model);
-  const activeChatId = useSelector((state: RootState) => state.chat.activeChatId);
 
   const dispatch = useDispatch();
 
@@ -39,8 +40,8 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Pr
     setDrawerOpen(newOpen);
   };
 
-  const handleIconButton = (id: string) => {
-    dispatch(setActiveChatId(id));
+  const handleIconButton = (chat: ChatType) => {
+    dispatch(setActiveChat(chat));
   }
 
   const handlePlusButton = () => {
@@ -48,7 +49,6 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Pr
   }
 
   const handleDeleteButton = (id: string) => {
-    
     dispatch(deleteChat({id}))
   }
 
@@ -58,12 +58,12 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Pr
 
   const onChangeMessage = (message: string) => {
     const data = {
-      chatId: activeChatId,
+      chatId: activeChat.id,
       message: message,
     }
 
     dispatch(changeSystemMessage(data));
-    setIsOpenDialog(false);
+    setIsOpenChangeDialog(false);
   }
 
 
@@ -74,7 +74,7 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Pr
   };
 
   const getModelList = () => {
-    const modelType = chats.filter((c: any) => c.id == activeChatId)[0];
+    const modelType = chats.filter((c: any) => c.id == activeChat.id)[0];
     if (!modelType) return <></>; 
     
     const modelTypeList = model_list.filter(v => v.key == modelType.model)[0].children;
@@ -89,7 +89,7 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Pr
     return children;
   }
 
-  if (!activeChatId) return;
+  if (!activeChat) return;
 
   return (
     <div>
@@ -105,7 +105,7 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Pr
             {
               chats.map((chat: any, index: number) => (
                 <ListItem key={index} disablePadding>
-                  <ListItemButton onClick={() => { handleIconButton(chat.id) }}>
+                  <ListItemButton onClick={() => { handleIconButton(chat) }}>
                     <ListItemIcon>
                       {
                         chat.isPic == true ?
@@ -119,7 +119,7 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Pr
                       aria-label="Open in new tab" 
                       component="a" 
                       href="#as-link" 
-                      onClick={handleChangeButton}
+                      onClick={() => {handleChangeButton()}}
                     >
                       <BuildIcon />
                     </IconButton>
@@ -158,14 +158,12 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Pr
       <ChatDialog
         isOpenDialog={isOpenDialog}
         setIsOpenDialog={setIsOpenDialog}
-        title={"채팅 추가하시겠습니까?"}
       />
 
       <ChatSystemMessageDialog
         onSave={onChangeMessage}
         isOpenDialog={isOpenChangeDialog}
         setIsOpenDialog={setIsOpenChangeDialog}
-        title={"채팅방의 시스템 메시지를 변경하시겠습니까?"}
       />
 
     </div>
