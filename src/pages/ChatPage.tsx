@@ -1,51 +1,46 @@
-import ChatDrawer from '@/components/chat/ChatDrawer';
 import ChatContainer from '@/container/ChatContainer';
 import MainLayout from '@layouts/MainLayout';
 
-import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton } from "@mui/material";
+import { OPEN_API } from '@/config';
+import OpenAIModelContext from '@/contexts/ModelContext';
 
-import { deleteAllChatMessage } from '@/redux/slices/chat';
-import { RootState } from '@/redux/store';
-import DensityMediumIcon from '@mui/icons-material/DensityMedium';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+
+import ChatDrawer from '@/components/chat/ChatDrawer';
+import { RootState, useSelector } from '@/redux/store';
+import { useContext, useEffect } from 'react';
 
 const ChatPage = () => {
+  const {activeChat } = useSelector((state: RootState) => state.chat);
+  const openAIModelContext = useContext(OpenAIModelContext);
 
-  const { chats , activeChat } = useSelector((state: RootState) => state.chat);
-  const [drawerOpen, setDrawerOpen] = useState<boolean>();
-  
-  const dispatch = useDispatch();
-
-  const handleIconButtonClick = () => {
-    setDrawerOpen(!drawerOpen);
-  }
-
-  const handleAllDeleteButton = () => {
-    dispatch(deleteAllChatMessage({chatId : activeChat.id}));
-  }
+  useEffect(()=> {
+    if(openAIModelContext){
+      const {setOpenAIModelList} = openAIModelContext;
+      fetch('https://api.openai.com/v1/models', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OPEN_API}`,
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setOpenAIModelList(data);
+      })
+      .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+      });
+    }
+  } , [])
 
   return (
     <MainLayout>
-      <div style={{ position: "absolute", top: "10px", left: "10px" }}>
-        <IconButton onClick={handleIconButtonClick}>
-          <DensityMediumIcon />
-        </IconButton>
-      </div >
-
-      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
-        <IconButton aria-label="delete" size="large" onClick={handleAllDeleteButton}>
-          <DeleteIcon fontSize="small"/>
-        </IconButton>
-      </div >
-
-      <ChatDrawer
-        chats={chats}
-        isOpen={drawerOpen}
-        setDrawerOpen={setDrawerOpen}
-      />
-
+      <ChatDrawer/>
       <ChatContainer chatId={activeChat.id} />
     </MainLayout>
   )
