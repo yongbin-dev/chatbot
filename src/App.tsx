@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import Router from "./routes";
 import AuthContext from "./contexts/AuthContext";
 import LoginPage from "./pages/LoginPage";
+import Router from "./routes";
 import { getCookie } from "./utils/CookieUtil";
 
 function App() {
@@ -12,6 +12,7 @@ function App() {
   if (isLogin == false && cookieLogin != true) {
     return <LoginPage />;
   }
+
 
   return <Router />;
 }

@@ -1,8 +1,13 @@
-import { ModelDetail, model_list } from "@/constants/modelList";
+import { ModelType } from "@/constants/modelConstants";
+import { model_list } from "@/constants/modelList";
+import OpenAIModelContext, { OpenAIModel } from "@/contexts/ModelContext";
+import { ChatType, changeSystemMessage, deleteAllChatMessage, deleteChat, setActiveChat } from "@/redux/slices/chat";
+import { changeModel } from "@/redux/slices/model";
 import { RootState } from "@/redux/store";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import BuildIcon from '@mui/icons-material/Build';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import PhotoIcon from '@mui/icons-material/Photo';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -12,33 +17,38 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChatDialog from './ChatDialog';
 import ChatSystemMessageDialog from "./ChatSystemMessageDialog";
 import style from "./style/chat.module.css";
-import { ChatType, changeSystemMessage, deleteChat, setActiveChat } from "@/redux/slices/chat";
-import { changeModel } from "@/redux/slices/model";
 
 interface Props {
-  isOpen?: boolean,
-  chats: any,
-  readonly setDrawerOpen: (isOpen: boolean) => void;
 }
 
-export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Props) {
-  
+export default function ChatDrawer({ }: Props) {
+  const openAIModelContext = useContext(OpenAIModelContext);
+
   const { model } = useSelector((state: RootState) => state.model);
-  const { activeChat } = useSelector((state: RootState) => state.chat);
+  const { chats, activeChat } = useSelector((state: RootState) => state.chat);
 
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
   const [isOpenChangeDialog, setIsOpenChangeDialog] = useState<boolean>(false);
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setDrawerOpen(newOpen);
   };
+
+  const handleIconButtonClick = () => {
+    setDrawerOpen(!drawerOpen);
+  }
+
+  const handleAllDeleteButton = () => {
+    dispatch(deleteAllChatMessage({ chatId: activeChat.id }));
+  }
 
   const handleIconButton = (chat: ChatType) => {
     dispatch(setActiveChat(chat));
@@ -49,7 +59,7 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Pr
   }
 
   const handleDeleteButton = (id: string) => {
-    dispatch(deleteChat({id}))
+    dispatch(deleteChat({ id }))
   }
 
   const handleChangeButton = () => {
@@ -75,97 +85,127 @@ export default function ChatDrawer({ chats, isOpen = false, setDrawerOpen  }: Pr
 
   const getModelList = () => {
     const modelType = chats.filter((c: any) => c.id == activeChat.id)[0];
-    if (!modelType) return <></>; 
-    
-    const modelTypeList = model_list.filter(v => v.key == modelType.model)[0].children;
-    const children = modelTypeList.map((mt: ModelDetail) => {
-      return (
-        <MenuItem key={mt.key} value={mt.value}>
-          {mt.key}
-        </MenuItem>
-      )
-    })
-    
-    return children;
+    if (!modelType) return <></>;
+
+    if (
+      modelType.model == ModelType.GPT &&
+      openAIModelContext
+    ) {
+      const { data } = openAIModelContext.openAIModelList
+
+      const modelTypeList = data
+        .filter((i : OpenAIModel)=> i.id.startsWith("gpt"))
+        .sort((a :any, b :any) => { return b.created - a.created })
+        .map((mt: OpenAIModel) => {
+          return (
+            <MenuItem key={mt.id} value={mt.id}>
+              {mt.id}
+            </MenuItem>
+          )
+        })
+
+      
+
+      return modelTypeList
+    }
+
   }
 
   if (!activeChat) return;
 
   return (
-    <div>
-      <Drawer open={isOpen} onClose={toggleDrawer(false)}>
-        <Box sx={{ width: 250 }} role="presentation" >
-          <div style={{ width: "100%" }}>
-            <IconButton style={{ float: "right", zIndex: "9999" }} onClick={handlePlusButton}>
-              <AddCircleOutlineIcon />
-            </IconButton>
-          </div>
+    <>
+      <div style={{ position: "absolute", top: "10px", left: "10px" }}>
+        <IconButton onClick={handleIconButtonClick}>
+          <DensityMediumIcon />
+        </IconButton>
+      </div >
 
-          <List>
-            {
-              chats.map((chat: any, index: number) => (
-                <ListItem key={index} disablePadding>
-                  <ListItemButton onClick={() => { handleIconButton(chat) }}>
-                    <ListItemIcon>
-                      {
-                        chat.isPic == true ?
-                        <PhotoIcon /> :
-                        <img src={model_list.filter(v => v.key == chat.model)[0].imgUrl} width={25} />
-                      }
-                    </ListItemIcon>
-                    <ListItemText primary={chat.title} />
+      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <IconButton aria-label="delete" size="large" onClick={handleAllDeleteButton}>
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </div >
 
-                    <IconButton 
-                      aria-label="Open in new tab" 
-                      component="a" 
-                      href="#as-link" 
-                      onClick={() => {handleChangeButton()}}
-                    >
-                      <BuildIcon />
-                    </IconButton>
+      <div>
+        <Drawer open={drawerOpen} onClose={toggleDrawer(false)}>
+          <Box sx={{ width: 250 }} role="presentation" >
+            <div style={{ width: "100%" }}>
+              <IconButton style={{ float: "right", zIndex: "9999" }} onClick={handlePlusButton}>
+                <AddCircleOutlineIcon />
+              </IconButton>
+            </div>
 
-                    <IconButton 
-                      aria-label="Open in new tab" 
-                      component="a" 
-                      href="#as-link" 
-                      onClick={() => { handleDeleteButton(chat.id) }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+            <List>
+              {
+                chats.map((chat: any, index: number) => (
+                  <ListItem key={index} disablePadding>
+                    <ListItemButton onClick={() => { handleIconButton(chat) }}>
+                      <ListItemIcon>
+                        {
+                          chat.isPic == true ?
+                            <PhotoIcon /> :
+                            <img src={model_list.filter(v => v.key == chat.model)[0].imgUrl} width={25} />
+                        }
+                      </ListItemIcon>
+                      <ListItemText primary={chat.title} />
 
-                  </ListItemButton>
-                </ListItem>
-              ))}
-          </List>
+                      <IconButton
+                        aria-label="Open in new tab"
+                        component="a"
+                        href="#as-link"
+                        onClick={() => { handleChangeButton() }}
+                      >
+                        <BuildIcon />
+                      </IconButton>
 
-          <div className={style.drawer_radio_wrapper}>
-            <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-              <InputLabel id="demo-select-small-label">Model</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={model}
-                label="Model"
-                onChange={handleChange}
-              >
-                {getModelList()}
-              </Select>
-            </FormControl>
-          </div>
-        </Box>
-      </Drawer>
+                      <IconButton
+                        aria-label="Open in new tab"
+                        component="a"
+                        href="#as-link"
+                        onClick={() => { handleDeleteButton(chat.id) }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
 
-      <ChatDialog
-        isOpenDialog={isOpenDialog}
-        setIsOpenDialog={setIsOpenDialog}
-      />
+                    </ListItemButton>
+                  </ListItem>
+                ))
+              }
+            </List>
 
-      <ChatSystemMessageDialog
-        onSave={onChangeMessage}
-        isOpenDialog={isOpenChangeDialog}
-        setIsOpenDialog={setIsOpenChangeDialog}
-      />
+            <div className={style.drawer_radio_wrapper}>
+              <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                <InputLabel id="demo-select-small-label">Model</InputLabel>
+                <Select
+                  labelId="demo-select-small-label"
+                  id="demo-select-small"
+                  value={model}
+                  label="Model"
+                  onChange={handleChange}
+                >
+                  {getModelList()}
+                </Select>
+              </FormControl>
+            </div>
+          </Box>
+        </Drawer>
 
-    </div>
+        {
+          <ChatDialog
+            isOpenDialog={isOpenDialog}
+            setIsOpenDialog={setIsOpenDialog}
+          />
+        }
+
+        {
+          <ChatSystemMessageDialog
+            onSave={onChangeMessage}
+            isOpenDialog={isOpenChangeDialog}
+            setIsOpenDialog={setIsOpenChangeDialog}
+          />
+        }
+      </div>
+    </>
   );
 }
