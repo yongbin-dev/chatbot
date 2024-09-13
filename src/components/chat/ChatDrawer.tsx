@@ -85,17 +85,12 @@ export default function ChatDrawer({ }: Props) {
 
   const getModelList = () => {
     const modelType = chats.filter((c: any) => c.id == activeChat.id)[0];
-    if (!modelType) return <></>;
-
-    if (
-      modelType.model == ModelType.GPT &&
-      openAIModelContext
-    ) {
+    if (!modelType || !openAIModelContext) return <></>;
+    if (modelType.model == ModelType.GPT) {
       const { data } = openAIModelContext.openAIModelList
-
       const modelTypeList = data
-        .filter((i : OpenAIModel)=> i.id.startsWith("gpt"))
-        .sort((a :any, b :any) => { return b.created - a.created })
+        // .filter((i : OpenAIModel)=> i.id.startsWith("gpt"))
+        .sort((a :any, b :any) => { return b.created - a.created  })
         .map((mt: OpenAIModel) => {
           return (
             <MenuItem key={mt.id} value={mt.id}>
@@ -103,12 +98,10 @@ export default function ChatDrawer({ }: Props) {
             </MenuItem>
           )
         })
-
-      
-
       return modelTypeList
+    }else{
+      return <></>
     }
-
   }
 
   if (!activeChat) return;
