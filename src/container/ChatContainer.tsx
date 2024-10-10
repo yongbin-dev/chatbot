@@ -41,11 +41,11 @@ const ChatContainer = ({ chatId }: Props) => {
       return <CommonAlert msg={"질문"}></CommonAlert>;
     }
 
-    if(!model) {
+    if (!model) {
       alert('모델을 선택해주세요.')
       return;
     }
-    
+
     if (chat.isPic == true) {
       createPicChat(inputValue);
     } else {
@@ -54,10 +54,9 @@ const ChatContainer = ({ chatId }: Props) => {
   };
 
   const createPicChat = async (inputValue: string) => {
-    if(chat.model == ModelType.CLAUDE) return;
+    if (chat.model == ModelType.CLAUDE) return;
 
     setLoading(true);
-
 
     const pic_message = chat.pic_message ? [...chat.pic_message] : [];
     const newMessage = pic_message;
@@ -95,30 +94,67 @@ const ChatContainer = ({ chatId }: Props) => {
     // 질문
     newMessage.push(msg);
 
-    const modelType =  chat.model
-    const result : any = await openAIUtils.sendQuestion(newMessage, modelType ,model, false);
-    let answerStream = "";
+    const modelType = chat.model
+    let result: any
 
-    for await (const chunk of result) {
-      if (chunk.choices[0]?.delta?.content) {
-        answerStream += chunk.choices[0]?.delta?.content;
-      }
-      const currentChat: CurrentChat = {
-        id: parseInt(chatId),
-        question: inputValue,
-        answer: answerStream,
-      };
-      setResult(currentChat);
-      moveScroll();
+    try {
+      result = await openAIUtils.sendQuestion(newMessage, modelType, model, false);
+    } catch (error) {
+      alert('api 를 호출하는 도중에 에러가 발생하였습니다.\n모델을 변경하여 다시 시도해주세요.');
+      console.log(error)
+      return;
     }
 
-    // 답변
-    const assistantMsg: ChatCompletionMessageParam = {
-      role: "assistant",
-      content: answerStream,
-    };
+    let answerStream = "";
 
-    newMessage.push(assistantMsg);
+    switch (chat.model) {
+      case ModelType.GPT:
+        for await (const chunk of result) {
+          if (chunk.choices[0]?.delta?.content) {
+            answerStream += chunk.choices[0]?.delta?.content;
+          }
+          const currentChat: CurrentChat = {
+            id: parseInt(chatId),
+            question: inputValue,
+            answer: answerStream,
+          };
+          setResult(currentChat);
+          moveScroll();
+        }
+
+        // 답변
+        const assistantMsg: ChatCompletionMessageParam = {
+          role: "assistant",
+          content: answerStream,
+        };
+
+        newMessage.push(assistantMsg);
+        break;
+
+      case ModelType.CLAUDE:
+        for await (const chunk of result) {
+          if (chunk.type == 'content_block_delta') {
+            answerStream += chunk.delta.text
+          }
+
+          const currentChat: CurrentChat = {
+            id: parseInt(chatId),
+            question: inputValue,
+            answer: answerStream,
+          };
+          setResult(currentChat);
+          moveScroll();
+        }
+
+        const claudeMsg: ChatCompletionMessageParam = {
+          role: "assistant",
+          content: answerStream,
+        };
+
+        newMessage.push(claudeMsg);
+        break;
+    }
+
 
     const data = {
       id: chatId,

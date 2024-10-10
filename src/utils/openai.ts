@@ -1,10 +1,11 @@
-import { OPEN_API , CLAUDE_API_KEY } from "@/config";
+import { OPEN_API, CLAUDE_API_KEY } from "@/config";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import Anthropic from '@anthropic-ai/sdk';
+import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 import { ModelType } from "@/constants/modelConstants";
+import { MessageParam } from "@anthropic-ai/sdk/resources/messages.mjs";
 
-// chat GPT 
+// chat GPT
 const openai = new OpenAI({
   apiKey: OPEN_API,
   dangerouslyAllowBrowser: true,
@@ -17,37 +18,41 @@ const anthropic = new Anthropic({
 
 const openAIUtils = {
   async sendQuestion(
-    originalMessage: ChatCompletionMessageParam[],
-    modelType : string , 
+    originalMessage: ChatCompletionMessageParam[] | MessageParam[],
+    modelType: string,
     model: string,
     isSlice = true
   ) {
-
     let message = originalMessage;
     if (isSlice == true) {
       message = sliceMessage(message);
     }
 
     switch (modelType) {
-      case ModelType.GPT: 
-        const stream = await openai.chat.completions.create({
+      case ModelType.GPT:
+        try {
+          const stream = await openai.chat.completions.create({
+            model,
+            messages: message as ChatCompletionMessageParam[],
+            temperature: 0.7,
+            stream: true,
+          });
+          return stream;
+        } catch (error) {
+          throw error;
+        }
+      case ModelType.CLAUDE:
+        message = message.slice(1);
+        const msg = await anthropic.messages.stream({
           model,
-          messages: message,
-          temperature: 0.7,
-          stream: true,
-        });
-        return stream;
-      case ModelType.CLAUDE: 
-        const msg = await anthropic.messages.create({
-          model: "claude-3-5-sonnet-20240620",
           max_tokens: 1024,
-          messages: [{ role: "user", content: "Hello, Claude" }],
+          messages: message as MessageParam[],
         });
         return msg;
 
-      default : 
+      default:
         return null;
-    } 
+    }
 
     return null;
   },
@@ -63,12 +68,14 @@ const openAIUtils = {
     return stream;
   },
 
-  getSystemMessage(){
-    return `저는 java 언어를 기반으로 하는 백엔드 개발자입니다.`
-  }
+  getSystemMessage() {
+    return `저는 java 언어를 기반으로 하는 백엔드 개발자입니다.`;
+  },
 };
 
-const sliceMessage = (originalMessage: ChatCompletionMessageParam[]) => {
+const sliceMessage = (
+  originalMessage: ChatCompletionMessageParam[] | MessageParam[]
+) => {
   if (originalMessage.length < 5) return originalMessage;
 
   return originalMessage.slice(2);
