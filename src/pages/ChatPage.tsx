@@ -10,37 +10,50 @@ import { RootState, useSelector } from '@/redux/store';
 import { useContext, useEffect } from 'react';
 
 const ChatPage = () => {
-  const {activeChat } = useSelector((state: RootState) => state.chat);
+  const { activeChat } = useSelector((state: RootState) => state.chat);
   const openAIModelContext = useContext(OpenAIModelContext);
 
-  useEffect(()=> {
-    if(openAIModelContext){
-      const {setOpenAIModelList} = openAIModelContext;
-      fetch('https://api.openai.com/v1/models', {
+  useEffect(() => {
+    if (openAIModelContext) {
+      const { setOpenAIModelList } = openAIModelContext;
+
+      const gptModel = fetch('https://api.openai.com/v1/models', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${OPEN_API}`,
         }
-      })
-      .then(response => {
+      }).then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         return response.json();
-      })
-      .then(data => {
-        setOpenAIModelList(data);
-      })
-      .catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
       });
+
+      // const claude = fetch('https://api.openai.com/v1/models', {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${OPEN_API}`,
+      //   }
+      // }).then(response => {
+      //   if (!response.ok) {
+      //     throw new Error('Network response was not ok');
+      //   }
+      //   return response.json();
+      // });
+
+      Promise.all([gptModel,]).then((values) => {
+        setOpenAIModelList(values[0]);
+      })
+
+
     }
-  } , [])
+  }, [])
 
   return (
     <MainLayout>
-      <ChatDrawer/>
+      <ChatDrawer />
       <ChatContainer chatId={activeChat.id} />
     </MainLayout>
   )

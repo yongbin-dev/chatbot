@@ -90,7 +90,7 @@ export default function ChatDrawer({ }: Props) {
       const { data } = openAIModelContext.openAIModelList
       const modelTypeList = data
         // .filter((i : OpenAIModel)=> i.id.startsWith("gpt"))
-        .sort((a :any, b :any) => { return b.created - a.created  })
+        .sort((a: any, b: any) => { return b.created - a.created })
         .map((mt: OpenAIModel) => {
           return (
             <MenuItem key={mt.id} value={mt.id}>
@@ -99,8 +99,12 @@ export default function ChatDrawer({ }: Props) {
           )
         })
       return modelTypeList
-    }else{
-      return <></>
+    } else {
+      return (
+        <MenuItem key={"claude-3-5-sonnet-20240620"} value={"claude-3-5-sonnet-20240620"}>
+          claude-3-5-sonnet-20240620
+        </MenuItem>
+      )
     }
   }
 
