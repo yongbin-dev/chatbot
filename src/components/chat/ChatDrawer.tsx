@@ -9,7 +9,7 @@ import BuildIcon from '@mui/icons-material/Build';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import PhotoIcon from '@mui/icons-material/Photo';
-import { FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -22,6 +22,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import ChatDialog from './ChatDialog';
 import ChatSystemMessageDialog from "./ChatSystemMessageDialog";
 import style from "./style/chat.module.css";
+import ChatModelDescriptionDialog from "./ChatModelDescriptionDialog";
+
+
+const getMenuItem = (data: OpenAIModel[], modelType: ModelType) => {
+  const modelTypeList = data
+    .filter((i: OpenAIModel) => i.model == modelType)
+    .sort((a: any, b: any) => { return b.created - a.created })
+    .map((mt: OpenAIModel) => {
+      return (
+        <MenuItem key={mt.id} value={mt.id}>
+          {mt.id}
+        </MenuItem>
+      )
+    })
+  return modelTypeList
+
+}
 
 interface Props {
 }
@@ -34,6 +51,7 @@ export default function ChatDrawer({ }: Props) {
 
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
   const [isOpenChangeDialog, setIsOpenChangeDialog] = useState<boolean>(false);
+  const [isOpenModelDescriptionDialog, setIsOpenModelDescriptionDialog] = useState<boolean>(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const dispatch = useDispatch();
@@ -44,6 +62,10 @@ export default function ChatDrawer({ }: Props) {
 
   const handleIconButtonClick = () => {
     setDrawerOpen(!drawerOpen);
+  }
+
+  const handleDescriptionButtonClick = () => {
+    setIsOpenModelDescriptionDialog(!isOpenModelDescriptionDialog);
   }
 
   const handleAllDeleteButton = () => {
@@ -86,26 +108,10 @@ export default function ChatDrawer({ }: Props) {
   const getModelList = () => {
     const modelType = chats.filter((c: any) => c.id == activeChat.id)[0];
     if (!modelType || !openAIModelContext) return <></>;
-    if (modelType.model == ModelType.GPT) {
-      const { data } = openAIModelContext.openAIModelList
-      const modelTypeList = data
-        // .filter((i : OpenAIModel)=> i.id.startsWith("gpt"))
-        .sort((a: any, b: any) => { return b.created - a.created })
-        .map((mt: OpenAIModel) => {
-          return (
-            <MenuItem key={mt.id} value={mt.id}>
-              {mt.id}
-            </MenuItem>
-          )
-        })
-      return modelTypeList
-    } else {
-      return (
-        <MenuItem key={"claude-3-5-sonnet-20240620"} value={"claude-3-5-sonnet-20240620"}>
-          claude-3-5-sonnet-20240620
-        </MenuItem>
-      )
-    }
+
+    const { data } = openAIModelContext.openAIModelList
+    const modelTypeList = getMenuItem(data, modelType.model)
+    return modelTypeList
   }
 
   if (!activeChat) return;
@@ -171,6 +177,14 @@ export default function ChatDrawer({ }: Props) {
               }
             </List>
 
+            <div className={style.drawer_descriptionModel_wrapper}>
+              <Button
+                variant="contained"
+                onClick={handleDescriptionButtonClick}
+              >
+                설명보기
+              </Button>
+            </div>
             <div className={style.drawer_radio_wrapper}>
               <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                 <InputLabel id="demo-select-small-label">Model</InputLabel>
@@ -187,22 +201,23 @@ export default function ChatDrawer({ }: Props) {
             </div>
           </Box>
         </Drawer>
-
-        {
-          <ChatDialog
-            isOpenDialog={isOpenDialog}
-            setIsOpenDialog={setIsOpenDialog}
-          />
-        }
-
-        {
-          <ChatSystemMessageDialog
-            onSave={onChangeMessage}
-            isOpenDialog={isOpenChangeDialog}
-            setIsOpenDialog={setIsOpenChangeDialog}
-          />
-        }
       </div>
+
+      <ChatDialog
+        isOpenDialog={isOpenDialog}
+        setIsOpenDialog={setIsOpenDialog}
+      />
+
+      <ChatSystemMessageDialog
+        onSave={onChangeMessage}
+        isOpenDialog={isOpenChangeDialog}
+        setIsOpenDialog={setIsOpenChangeDialog}
+      />
+
+      <ChatModelDescriptionDialog
+        isOpenModelDescriptionDialog={isOpenModelDescriptionDialog}
+        setIsOpenModelDescriptionDialog={setIsOpenModelDescriptionDialog}
+      />
     </>
   );
 }

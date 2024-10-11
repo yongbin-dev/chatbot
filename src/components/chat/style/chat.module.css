@@ -56,10 +56,20 @@
   border: 1px solid;
 }
 
+
+.drawer_descriptionModel_wrapper {
+  bottom: 80px;
+  display: flex;
+  position: absolute;
+  width: 200px;
+  padding: 10px;
+  flex-direction: row-reverse
+}
+
 .drawer_radio_wrapper {
   bottom: 0px;
   display: flex;
   position: absolute;
-  width: 250px;
+  width: 200px;
   padding: 10px;
 }

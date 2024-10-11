@@ -1,22 +1,24 @@
 import React from "react";
 
 export type OpenAIModel = {
-  id: string,
-  object: string,
-  created: number,
-  owned_by: string
-}
+  id: string;
+  object: string;
+  created: number;
+  owned_by: string;
+  model: string;
+};
 
 export type OpenAIModelList = {
-  object: "list",
-  data: OpenAIModel[]
-}
+  data: OpenAIModel[];
+};
 
 export interface OpenAIModelContextType {
-  openAIModelList: OpenAIModelList ;
-  setOpenAIModelList: (value: OpenAIModelList ) => void;
+  openAIModelList: OpenAIModelList;
+  setOpenAIModelList: (value: OpenAIModelList) => void;
 }
 
-const OpenAIModelContext = React.createContext<OpenAIModelContextType | null>(null);
+const OpenAIModelContext = React.createContext<OpenAIModelContextType | null>(
+  null
+);
 
 export default OpenAIModelContext;
