@@ -53,8 +53,6 @@ const openAIUtils = {
       default:
         return null;
     }
-
-    return null;
   },
   async sendQuestionImageGeneration(prompt: string) {
     const stream = await openai.images.generate({
