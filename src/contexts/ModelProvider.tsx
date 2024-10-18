@@ -3,20 +3,19 @@ import OpenAIModelContext, { OpenAIModelList } from "./ModelContext.js";
 
 
 interface Props {
-  children : JSX.Element
+  children: JSX.Element
 }
 
-const ModelProvider = ({children} : Props) => {
+const ModelProvider = ({ children }: Props) => {
 
-  const init : OpenAIModelList = {
-    object : "list",
-    data : []
+  const init: OpenAIModelList = {
+    data: []
   }
 
-  const [openAIModelList , setOpenAIModelList] = useState<OpenAIModelList>(init);
+  const [openAIModelList, setOpenAIModelList] = useState<OpenAIModelList>(init);
 
   return (
-    <OpenAIModelContext.Provider value={{openAIModelList , setOpenAIModelList}}>
+    <OpenAIModelContext.Provider value={{ openAIModelList, setOpenAIModelList }}>
       {children}
     </OpenAIModelContext.Provider>
   )
