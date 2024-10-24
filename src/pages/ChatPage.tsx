@@ -34,6 +34,7 @@ const ChatPage = () => {
 
       // claude model
       const claude_model = [
+        { id: "claude-3-5-sonnet-latest", object: 'model', model: ModelType.CLAUDE },
         { id: "claude-3-5-sonnet-20241022", object: 'model', model: ModelType.CLAUDE },
         { id: "claude-3-5-sonnet-20240620", object: 'model', model: ModelType.CLAUDE },
         { id: "claude-3-opus-20240229	", object: 'model', model: ModelType.CLAUDE },
