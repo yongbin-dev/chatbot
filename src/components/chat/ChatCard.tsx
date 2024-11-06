@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import CustomMarkdown from '../common/CommonMarkdown';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 
 interface Props {
   question: any,
@@ -25,7 +25,9 @@ const ChatCard = ({ question, answer, messageId, handleDeleteButton }: Props) =>
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography variant="h5" component="div">
-          <b>{question.length > 20 ? question.substring(0, 20) : question}  </b>
+          <Tooltip title={question}>
+            <b>{question.length > 20 ? question.substring(0, 20) : question}  </b>
+          </Tooltip>
           <IconButton aria-label="delete" onClick={onClickDeleteButton}>
             <DeleteIcon />
           </IconButton>
