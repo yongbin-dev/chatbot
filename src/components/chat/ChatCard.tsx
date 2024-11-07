@@ -1,12 +1,11 @@
+import DeleteIcon from '@mui/icons-material/Delete';
+import DetailsIcon from '@mui/icons-material/Details';
+import { IconButton, Tooltip } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import CustomMarkdown from '../common/CommonMarkdown';
-import DetailsIcon from '@mui/icons-material/Details';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, IconButton, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { ContentCutRounded } from '@mui/icons-material';
+import CustomMarkdown from '../common/CommonMarkdown';
 
 interface Props {
   question: any,
