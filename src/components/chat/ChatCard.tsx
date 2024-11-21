@@ -38,7 +38,6 @@ const ChatCard = ({ question, answer, messageId, handleDeleteButton }: Props) =>
 
   }, [isDetail])
 
-
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
