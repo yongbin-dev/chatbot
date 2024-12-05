@@ -8,86 +8,90 @@ export type ChatType = {
   id: string;
   title: string;
   message: any;
-  model : ModelType,
+  model: ModelType;
   usage: {
     completion_tokens: number;
     prompt_tokens: number;
     total_tokens: number;
   };
-  isPic : boolean;
-  pic_message? : any;
+  isPic: boolean;
+  pic_message?: any;
   createDate: string;
   modifyDate: string;
-}
+};
 
 export interface ChatState {
-  chats: ChatType[]
-  activeChat : {
-    id : string , 
-    systemMessage : string
-  }
+  chats: ChatType[];
+  activeChat: {
+    id: string;
+    systemMessage: string;
+  };
 }
 
 // isPic: false,
 // picUrl: "",
-// date: "", 
+// date: "",
 
 const initialState: ChatState = {
   chats: [
     {
       id: PREFIX_ID + 0,
       title: "sample",
-      message: [{
-        role: "system",
-        content: "",
-      }],
+      message: [
+        {
+          role: "system",
+          content: "",
+        },
+      ],
       usage: {
         completion_tokens: 0,
         prompt_tokens: 0,
         total_tokens: 0,
       },
-      isPic : false,
-      pic_message : [] ,
+      isPic: false,
+      pic_message: [],
       createDate: "",
-      modifyDate : "",
-      model : ModelType.GPT,
+      modifyDate: "",
+      model: ModelType.GPT,
     },
   ],
-  activeChat : {
-    id : PREFIX_ID + 0,
-    systemMessage : ''
-  }
+  activeChat: {
+    id: PREFIX_ID + 0,
+    systemMessage: "",
+  },
 };
 
 export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setActiveChat : (state , action) => {
-      
+    setActiveChat: (state, action) => {
       const chatId = action.payload.id;
-      
-      const chat = state.chats.filter(i => i.id == chatId)[0]
-      const systemMessage = chat.message.filter((i : any) => i.role == 'system')[0].content;
-      
+
+      const chat = state.chats.filter((i) => i.id == chatId)[0];
+      const systemMessage = chat.message.filter(
+        (i: any) => i.role == "system"
+      )[0].content;
+
       state.activeChat.id = chatId;
       state.activeChat.systemMessage = systemMessage;
     },
-    changeSystemMessage : (state ,action) => {
-      const chatId : string = action.payload.chatId;
-      const systemMessage : string = action.payload.message;
+    changeSystemMessage: (state, action) => {
+      const chatId: string = action.payload.chatId;
+      const systemMessage: string = action.payload.message;
 
-      const chat = state.chats.filter(i => i.id == chatId)[0]
-      chat.message.filter((i : any) => i.role == 'system')[0].content = systemMessage;
+      const chat = state.chats.filter((i) => i.id == chatId)[0];
+      chat.message.filter((i: any) => i.role == "system")[0].content =
+        systemMessage;
     },
     addChat: (state, action) => {
-      const title : string  = action.payload.title;
-      const isPic : boolean = action.payload.isPic;
-      const model : ModelType = action.payload.model;
+      const title: string = action.payload.title;
+      const isPic: boolean = action.payload.isPic;
+      const model: ModelType = action.payload.model;
 
       const idArr = state.chats.map((i: any) => {
-        const id : string = i.id;
-        const idNum = Number(id.split('-')[1])
+        const id: string = i.id;
+        const idNum = Number(id.split("-")[1]);
         return idNum;
       });
 
@@ -98,10 +102,12 @@ export const chatSlice = createSlice({
       const chat = {
         id,
         title,
-        message: [{
-          role: "system",
-          content: "친구랑 대화하듯 답변해주세요.",
-        }],
+        message: [
+          {
+            role: "system",
+            content: "친구랑 대화하듯 답변해주세요.",
+          },
+        ],
         usage: {
           completion_tokens: 0,
           prompt_tokens: 0,
@@ -154,23 +160,23 @@ export const chatSlice = createSlice({
 
       const chat = state.chats.filter((i: any) => i.id == chatId)[0];
 
-      if(chat.isPic == true){
-        chat.pic_message.splice(messageIndex, 1);  
-      }else{
+      if (chat.isPic == true) {
+        chat.pic_message.splice(messageIndex, 1);
+      } else {
         chat.message.splice(messageIndex, 2);
       }
     },
-    deleteAllChatMessage:(state,action) => {
+    deleteAllChatMessage: (state, action) => {
       const chatId = action.payload.chatId;
-      
+
       const chat = state.chats.filter((i: any) => i.id == chatId)[0];
 
-      if(chat.isPic == true){
-        chat.pic_message.splice(1);  
-      }else{
+      if (chat.isPic == true) {
+        chat.pic_message.splice(1);
+      } else {
         chat.message.splice(1);
       }
-    }
+    },
   },
 });
 

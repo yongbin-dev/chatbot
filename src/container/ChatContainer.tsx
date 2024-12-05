@@ -36,7 +36,7 @@ const ChatContainer = ({ chatId }: Props) => {
   const chat = chats.filter((i: any) => i.id == chatId)[0];
   const dispatch = useDispatch();
 
-  const handleQuestionButton = async (inputValue: string) => {
+  const handleQuestionButton = async (inputValue: string, setInputValue: Function) => {
     if (!inputValue.trim()) {
       return <CommonAlert msg={"질문"}></CommonAlert>;
     }
@@ -46,11 +46,20 @@ const ChatContainer = ({ chatId }: Props) => {
       return;
     }
 
+    const errorMessage = "api 를 호출하는 도중에 에러가 발생하였습니다.\n모델을 변경하여 다시 시도해주세요.";
     if (chat.isPic == true) {
-      createPicChat(inputValue);
+      createPicChat(inputValue).catch(() => {
+        alert(errorMessage);
+      });
     } else {
-      createChat(inputValue);
+      createChat(inputValue).then(() => {
+        setInputValue("")
+      }).catch(() => {
+        alert(errorMessage);
+      });
     }
+
+
   };
 
   const createPicChat = async (inputValue: string) => {
@@ -60,7 +69,6 @@ const ChatContainer = ({ chatId }: Props) => {
 
     const pic_message = chat.pic_message ? [...chat.pic_message] : [];
     const newMessage = pic_message;
-
     const stream = await openAIUtils.sendQuestionImageGeneration(inputValue);
 
     newMessage.push({
@@ -97,13 +105,7 @@ const ChatContainer = ({ chatId }: Props) => {
     const modelType = chat.model
     let result: any
 
-    try {
-      result = await openAIUtils.sendQuestion(newMessage, modelType, model, false);
-    } catch (error) {
-      alert('api 를 호출하는 도중에 에러가 발생하였습니다.\n모델을 변경하여 다시 시도해주세요.');
-      console.log(error)
-      return;
-    }
+    result = await openAIUtils.sendQuestion(newMessage, modelType, model, false);
 
     let answerStream = "";
 
@@ -184,7 +186,6 @@ const ChatContainer = ({ chatId }: Props) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-
       {chat && (
         <>
           <div
