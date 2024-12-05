@@ -5,7 +5,7 @@ import { useState } from "react";
 import classes from "./style/chat.module.css";
 
 interface Props {
-  readonly handleQuestionButton: (inputValue: string) => void;
+  readonly handleQuestionButton: (inputValue: string, setInputValue: Function) => void;
   readonly handleInitButton: () => void;
 }
 
@@ -55,8 +55,7 @@ const ChatFooter = ({ handleQuestionButton }: Props) => {
 
   const onClickQuestionButton = () => {
     if (!inputValue) return;
-    handleQuestionButton(inputValue);
-    setInputValue("");
+    handleQuestionButton(inputValue, setInputValue);
   };
 
 

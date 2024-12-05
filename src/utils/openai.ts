@@ -42,13 +42,17 @@ const openAIUtils = {
           throw error;
         }
       case ModelType.CLAUDE:
-        message = message.slice(1);
-        const msg = await anthropic.messages.stream({
-          model,
-          max_tokens: 1024,
-          messages: message as MessageParam[],
-        });
-        return msg;
+        try {
+          message = message.slice(1);
+          const msg = await anthropic.messages.stream({
+            model,
+            max_tokens: 4096,
+            messages: message as MessageParam[],
+          });
+          return msg;
+        } catch (error) {
+          throw error;
+        }
 
       default:
         return null;
