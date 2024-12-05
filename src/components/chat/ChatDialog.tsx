@@ -34,14 +34,24 @@ interface Props {
 export default function ChatDialog({ isOpenDialog, setIsOpenDialog }: Props) {
 
   const [value, setValue] = React.useState<string>();
-  const [checked , setChecked] = React.useState<boolean>(false);
-  const [model , setModel] = React.useState<string>(ModelType.GPT);
-  
+  const [checked, setChecked] = React.useState<boolean>(false);
+  const [model, setModel] = React.useState<string>(ModelType.GPT);
+  const [isPicDisabled, setIsPicDisabled] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    if (model == ModelType.CLAUDE) {
+      setIsPicDisabled(true)
+      setChecked(false)
+    } else if (model == ModelType.GPT) {
+      setIsPicDisabled(false)
+    }
+  }, [model])
+
   const handleChange = (e: SelectChangeEvent) => {
     setModel(e.target.value)
   };
-  
-  
+
+
   const ModelTypeList = (
     model_list.map((modelType: Model) => {
       return (
@@ -67,8 +77,8 @@ export default function ChatDialog({ isOpenDialog, setIsOpenDialog }: Props) {
 
     const data = {
       title: value,
-      isPic : checked,
-      model : model
+      isPic: checked,
+      model: model
     }
 
     dispatch(addChat(data));
@@ -92,7 +102,7 @@ export default function ChatDialog({ isOpenDialog, setIsOpenDialog }: Props) {
         aria-labelledby="customized-dialog-title"
         open={isOpenDialog}
       >
-        
+
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           채팅방
         </DialogTitle>
@@ -110,11 +120,11 @@ export default function ChatDialog({ isOpenDialog, setIsOpenDialog }: Props) {
         </IconButton>
         <DialogContent dividers>
           <Typography gutterBottom>
-            채팅방을 생성한 후 하단 모델을 선택한 뒤 진행해주세요. <br/>
+            채팅방을 생성한 후 하단 모델을 선택한 뒤 진행해주세요. <br />
             이미지를 검색하고 싶다면 하단 '사진'을 클릭하여 체크해주시기 바랍니다.
           </Typography>
 
-          <div style={{ display: 'flex', alignItems: 'center' , marginTop: '2em' , float : 'right'}}>
+          <div style={{ display: 'flex', alignItems: 'center', marginTop: '2em', float: 'right' }}>
             <div>
               <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                 <InputLabel id="demo-select-small-label">Model</InputLabel>
@@ -131,9 +141,9 @@ export default function ChatDialog({ isOpenDialog, setIsOpenDialog }: Props) {
               <Input onChange={onChangeEvent} placeholder='채팅방 이름' />
             </div>
 
-            <div style={{marginLeft : '10px'}}>
+            <div style={{ marginLeft: '10px' }}>
               <span style={{ color: "grey" }}>사진</span>
-              <Checkbox {...label} color="success" onChange={handleOnChange} checked={checked} />
+              <Checkbox {...label} color="success" onChange={handleOnChange} checked={checked} disabled={isPicDisabled} />
             </div>
           </div>
           {/*<Typography gutterBottom>

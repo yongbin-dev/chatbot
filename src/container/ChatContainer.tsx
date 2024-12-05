@@ -49,12 +49,13 @@ const ChatContainer = ({ chatId }: Props) => {
     const errorMessage = "api 를 호출하는 도중에 에러가 발생하였습니다.\n모델을 변경하여 다시 시도해주세요.";
     if (chat.isPic == true) {
       createPicChat(inputValue).catch(() => {
+        setInputValue(inputValue)
         alert(errorMessage);
       });
     } else {
       createChat(inputValue).then(() => {
-        setInputValue("")
       }).catch((e: Error) => {
+        setInputValue(inputValue)
         alert(errorMessage);
         console.log(e)
       });
