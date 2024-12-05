@@ -55,6 +55,7 @@ const ChatFooter = ({ handleQuestionButton }: Props) => {
 
   const onClickQuestionButton = () => {
     if (!inputValue) return;
+    setInputValue('')
     handleQuestionButton(inputValue, setInputValue);
   };
 
