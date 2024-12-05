@@ -54,8 +54,9 @@ const ChatContainer = ({ chatId }: Props) => {
     } else {
       createChat(inputValue).then(() => {
         setInputValue("")
-      }).catch(() => {
+      }).catch((e: Error) => {
         alert(errorMessage);
+        console.log(e)
       });
     }
 

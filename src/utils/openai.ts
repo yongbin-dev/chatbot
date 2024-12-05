@@ -46,7 +46,7 @@ const openAIUtils = {
           message = message.slice(1);
           const msg = await anthropic.messages.stream({
             model,
-            max_tokens: 4096,
+            max_tokens: 1024,
             messages: message as MessageParam[],
           });
           return msg;
