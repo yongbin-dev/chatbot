@@ -22,7 +22,7 @@ const openAIUtils = {
     modelType: string,
     model: string,
     isSlice = true,
-    system = true
+    isSystem = true
   ) {
     let message: any = originalMessage;
     if (isSlice == true) {
@@ -31,20 +31,20 @@ const openAIUtils = {
 
     switch (modelType) {
       case ModelType.GPT:
-        let option = {};
-        message = originalMessage.filter((i) => i.role == "user");
+        const option: any = {
+          model,
+          stream: true,
+          temperature: 0.7,
+        };
 
-        if (system) {
-          option = {
-            temperature: 0.7,
-          };
+        if (isSystem == false) {
+          message = originalMessage.filter((i) => i.role == "user");
+          delete option.temperature;
         }
 
         try {
           const stream = await openai.chat.completions.create({
-            model,
             messages: message as ChatCompletionMessageParam[],
-            stream: true,
             ...option,
           });
           return stream;
@@ -53,7 +53,7 @@ const openAIUtils = {
         }
       case ModelType.CLAUDE:
         try {
-          message = message.slice(1);
+          message = originalMessage.filter((i) => i.role == "user");
           const msg = await anthropic.messages.stream({
             model,
             max_tokens: 1024,
