@@ -48,9 +48,11 @@ const ChatPage = () => {
       Promise.all([gptModel,]).then((values) => {
         const gptModel: [] = values[0].data;
         gptModel.forEach((obj: any) => {
+          const id: String = obj.id;
           const gpt = {
             ...obj,
-            model: ModelType.GPT
+            model: ModelType.GPT,
+            system: id.indexOf("o1") == 0 ? false : true
           };
 
           modelArr.push(gpt);

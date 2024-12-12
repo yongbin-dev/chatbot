@@ -1,9 +1,9 @@
-import { OPEN_API, CLAUDE_API_KEY } from "@/config";
-import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import Anthropic from "@anthropic-ai/sdk";
-import OpenAI from "openai";
+import { CLAUDE_API_KEY, OPEN_API } from "@/config";
 import { ModelType } from "@/constants/modelConstants";
+import Anthropic from "@anthropic-ai/sdk";
 import { MessageParam } from "@anthropic-ai/sdk/resources/messages.mjs";
+import OpenAI from "openai";
+import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 // chat GPT
 const openai = new OpenAI({
@@ -21,21 +21,31 @@ const openAIUtils = {
     originalMessage: ChatCompletionMessageParam[] | MessageParam[],
     modelType: string,
     model: string,
-    isSlice = true
+    isSlice = true,
+    system = true
   ) {
-    let message = originalMessage;
+    let message: any = originalMessage;
     if (isSlice == true) {
       message = sliceMessage(message);
     }
 
     switch (modelType) {
       case ModelType.GPT:
+        let option = {};
+        message = originalMessage.filter((i) => i.role == "user");
+
+        if (system) {
+          option = {
+            temperature: 0.7,
+          };
+        }
+
         try {
           const stream = await openai.chat.completions.create({
             model,
             messages: message as ChatCompletionMessageParam[],
-            temperature: 0.7,
             stream: true,
+            ...option,
           });
           return stream;
         } catch (error) {

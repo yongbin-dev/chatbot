@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { RootState } from "@/redux/store";
 import {
@@ -16,6 +16,8 @@ import CommonAlert from "@/components/common/CommonAlert";
 import openAIUtils from "@/utils/openai";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { ModelType } from "@/constants/modelConstants";
+import OpenAIModelContext from "@/contexts/ModelContext";
+import { ModeEdit } from "@mui/icons-material";
 
 type CurrentChat = {
   id: number;
@@ -32,6 +34,7 @@ const ChatContainer = ({ chatId }: Props) => {
   const { chats } = useSelector((state: RootState) => state.chat);
   const { model } = useSelector((state: RootState) => state.model);
   const [result, setResult] = useState<CurrentChat | null>();
+  const openAIModelContext = useContext(OpenAIModelContext);
 
   const chat = chats.filter((i: any) => i.id == chatId)[0];
   const dispatch = useDispatch();
@@ -57,7 +60,6 @@ const ChatContainer = ({ chatId }: Props) => {
       }).catch((e: Error) => {
         setInputValue(inputValue)
         alert(errorMessage);
-        console.log(e)
       });
     }
 
@@ -89,11 +91,13 @@ const ChatContainer = ({ chatId }: Props) => {
   };
 
   const createChat = async (inputValue: string) => {
+
     if (!chat.message) {
       alert('채팅방을 선택해주세요!');
       return;
     }
 
+    const system = isModelContainSystem();
     const newMessage = [...chat.message];
 
     const msg: ChatCompletionMessageParam = {
@@ -106,12 +110,11 @@ const ChatContainer = ({ chatId }: Props) => {
 
     const modelType = chat.model
     let result: any
-
-    result = await openAIUtils.sendQuestion(newMessage, modelType, model, false);
+    result = await sendQuestion(newMessage, modelType, system);
 
     let answerStream = "";
 
-    switch (chat.model) {
+    switch (modelType) {
       case ModelType.GPT:
         for await (const chunk of result) {
           if (chunk.choices[0]?.delta?.content) {
@@ -179,6 +182,22 @@ const ChatContainer = ({ chatId }: Props) => {
     if (!mainDiv) return;
     mainDiv.scrollTop = mainDiv.scrollHeight + 9999;
   };
+
+  const sendQuestion = async (newMessage: ChatCompletionMessageParam[], modelType: ModelType, system: boolean) => {
+    return await openAIUtils.sendQuestion(newMessage, modelType, model, false, system)
+  }
+
+  const isModelContainSystem = () => {
+    if (openAIModelContext) {
+      const { data } = openAIModelContext.openAIModelList;
+      const modelDetail: any = data.filter(v => model == v.id)[0];
+      if (modelDetail) {
+        return modelDetail.system
+      }
+    }
+
+    return true
+  }
 
   return (
     <>
