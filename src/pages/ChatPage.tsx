@@ -43,20 +43,21 @@ const ChatPage = () => {
 
       ]
 
-      const modelArr: any = []
+      const modelArr: any = claude_model;
+
       Promise.all([gptModel,]).then((values) => {
         const gptModel: [] = values[0].data;
-        const gpt_model = gptModel.map((obj: any) => {
-          return {
+        gptModel.forEach((obj: any) => {
+          const gpt = {
             ...obj,
             model: ModelType.GPT
           };
-        });
 
-        modelArr.concat(gpt_model);
+          modelArr.push(gpt);
+        });
       }).finally(() => {
         const model_list = {
-          data: modelArr.concat(claude_model)
+          data: modelArr
         }
 
         setOpenAIModelList(model_list);
