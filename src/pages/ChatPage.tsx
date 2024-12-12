@@ -30,7 +30,7 @@ const ChatPage = () => {
         }
 
         return response.json();
-      });
+      })
 
       // claude model
       const claude_model = [
@@ -43,9 +43,9 @@ const ChatPage = () => {
 
       ]
 
+      const modelArr: any = []
       Promise.all([gptModel,]).then((values) => {
         const gptModel: [] = values[0].data;
-
         const gpt_model = gptModel.map((obj: any) => {
           return {
             ...obj,
@@ -53,14 +53,14 @@ const ChatPage = () => {
           };
         });
 
+        modelArr.concat(gpt_model);
+      }).finally(() => {
         const model_list = {
-          data: gpt_model.concat(claude_model)
+          data: modelArr.concat(claude_model)
         }
 
         setOpenAIModelList(model_list);
       })
-
-
     }
   }, [])
 
