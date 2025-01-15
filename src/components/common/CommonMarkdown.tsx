@@ -2,7 +2,9 @@
 import ReactMarkdown from 'react-markdown';
 import { PrismLight } from 'react-syntax-highlighter';
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm'
+  ;
 interface Props {
   text: string
 }
@@ -30,7 +32,11 @@ const CustomMarkdown = ({ text }: Props) => {
           </code>
         )
       }
-    }}>
+    }}
+      rehypePlugins={[rehypeRaw]}
+      remarkPlugins={[remarkGfm]}
+      remarkRehypeOptions={{ passThrough: ['link'] }}
+    >
       {text}
     </ReactMarkdown>
   )
