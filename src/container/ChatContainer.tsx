@@ -16,7 +16,10 @@ import { ModelType } from "@/constants/modelConstants";
 import OpenAIModelContext from "@/contexts/ModelContext";
 import openAIUtils from "@/utils/openai";
 import { Backdrop, CircularProgress } from "@mui/material";
+<<<<<<< HEAD
 import styles from "./container.module.css"
+=======
+>>>>>>> main
 
 type CurrentChat = {
   id: number;
@@ -56,7 +59,12 @@ const ChatContainer = ({ chatId }: Props) => {
       });
     } else {
       createChat(inputValue).then(() => {
+<<<<<<< HEAD
       }).catch(() => {
+=======
+      }).catch((e: Error) => {
+        console.log(e.message)
+>>>>>>> main
         setInputValue(inputValue)
         alert(errorMessage);
       });
