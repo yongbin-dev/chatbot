@@ -6,7 +6,7 @@ import { Container } from "@mui/material";
 import Button from "@mui/material/Button";
 import { useRef, useState } from "react";
 import classes from "./style/chat.module.css";
-import FileCard from '../common/FileCard';
+import ImageIcon from '@mui/icons-material/Image';
 
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);
@@ -35,16 +35,11 @@ const LangFooter = ({ handleQuestionButton }: Props) => {
     const file = event.target.files[0];
     if (file) {
       // Blob 객체를 ArrayBuffer로 변환
-
-
       switch (file.type) {
         case "application/pdf":
-
           setFile(file); // 선택한 파일 저장
           break;
       }
-
-
     } else {
       console.error('Error')
     }
@@ -115,6 +110,7 @@ const LangFooter = ({ handleQuestionButton }: Props) => {
   return (
     <Container>
       <div className={classes.question_wrapper} id={"chatTextArea"} style={{ borderColor: "#0288d1" }}>
+
         <div className={classes.textarea_wrapper}>
           <textarea
             className={classes.textarea_input}
@@ -147,7 +143,30 @@ const LangFooter = ({ handleQuestionButton }: Props) => {
               />
             </IconButton>
 
-            <FileCard />
+            <IconButton style={{ marginRight: '0.5em' }} component="label">
+              <ImageIcon />
+              <VisuallyHiddenInput
+                type="file"
+                onChange={onFileChange}
+                ref={fileInputRef}
+              />
+            </IconButton>
+
+            <IconButton style={{ marginRight: '0.5em' }} component="label">
+              <img
+                src="/images/icon/excel_icon.png"
+                srcSet="/images/icon/excel_icon.png"
+                loading="lazy"
+                alt=""
+              />
+              <VisuallyHiddenInput
+                type="file"
+                onChange={onFileChange}
+                ref={fileInputRef}
+              />
+            </IconButton>
+
+
             {/* <span style={{}}>
               {file ? file.name : ""}
             </span> */}

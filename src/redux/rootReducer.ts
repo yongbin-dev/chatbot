@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 // import mailReducer from './slices/mail';
 import chatReducer from "./slices/chat";
 import modelReducer from "./slices/model";
+import fileReducer from "./slices/file";
 // import productReducer from './slices/product';
 // import calendarReducer from './slices/calendar';
 // import kanbanReducer from './slices/kanban';
@@ -30,9 +31,16 @@ const modelPersistConfig = {
   keyPrefix: "redux-chat-",
 };
 
+const filePersistConfig = {
+  key: "file",
+  storage,
+  keyPrefix: "redux-file-",
+};
+
 const rootReducer = combineReducers({
   chat: persistReducer(chatPersistConfig, chatReducer),
   model: persistReducer(modelPersistConfig, modelReducer),
+  file: persistReducer(filePersistConfig, fileReducer),
   // product: persistReducer(productPersistConfig, productReducer),
 });
 

@@ -18,7 +18,8 @@ UploadRouter.get("/:id", function (req, res, next) {
 UploadRouter.post("/", upload.single("uploadFile"), async (req, res) => {
   try {
     // 업로드된 파일 경로
-    const filePath = path.resolve(req.file.path);
+    const file = req.file;
+    const filePath = path.resolve(file.path);
     const message = req.body.message; // 메시지
 
     // 파일이 존재하는지 확인
@@ -26,12 +27,21 @@ UploadRouter.post("/", upload.single("uploadFile"), async (req, res) => {
       return res.status(400).send("업로드된 파일이 존재하지 않습니다.");
     }
 
+    const originalname = Buffer.from(file.originalname, "latin1").toString(
+      "utf8"
+    );
+
+    const name = originalname.split(".")[0];
     // const result = await getMessage(filePath, message);
     // PDFLoader를 이용해 PDF 내용 로드
     // console.log(docs);
     // PDF 내용을 클라이언트에 응답
     res.json({
       question: message,
+      extension: file.mimetype,
+      size: file.size,
+      name: originalname,
+      // extension : ,
       message: "result.answer",
     });
 
