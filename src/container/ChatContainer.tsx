@@ -13,11 +13,10 @@ import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import ChatFooter from "@/components/chat/ChatFooter";
 import ChatMain from "@/components/chat/ChatMain";
 import CommonAlert from "@/components/common/CommonAlert";
-import openAIUtils from "@/utils/openai";
-import { Backdrop, CircularProgress } from "@mui/material";
 import { ModelType } from "@/constants/modelConstants";
 import OpenAIModelContext from "@/contexts/ModelContext";
-import { ModeEdit } from "@mui/icons-material";
+import openAIUtils from "@/utils/openai";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 type CurrentChat = {
   id: number;
@@ -58,6 +57,7 @@ const ChatContainer = ({ chatId }: Props) => {
     } else {
       createChat(inputValue).then(() => {
       }).catch((e: Error) => {
+        console.log(e.message)
         setInputValue(inputValue)
         alert(errorMessage);
       });
