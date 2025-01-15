@@ -1,24 +1,24 @@
 import { ModelType } from "@/constants/modelConstants";
 
 export type Model = {
-  key : string , 
-  model : ModelType , 
-  children : ModelDetail[],
-  imgUrl? : string , 
-}
+  key: string;
+  model: ModelType;
+  children: ModelDetail[];
+  imgUrl?: string;
+};
 
 export type ModelDetail = {
-  key: string,
-  value: string,
-  token: number,
-  default? : boolean
-}
+  key: string;
+  value: string;
+  token: number;
+  default?: boolean;
+};
 
-export const model_list : Model[] = [
+export const model_list: Model[] = [
   {
     key: ModelType.GPT,
     model: ModelType.GPT,
-    imgUrl : "/images/gpt.png",
+    imgUrl: "/images/gpt.png",
     children: [
       {
         key: "gpt-4o",
@@ -48,10 +48,16 @@ export const model_list : Model[] = [
       },
     ],
   },
-  { 
-    key: ModelType.CLAUDE ,
-    model: ModelType.CLAUDE ,
-    imgUrl : "/images/claude.png",
-    children : []
+  {
+    key: ModelType.CLAUDE,
+    model: ModelType.CLAUDE,
+    imgUrl: "/images/claude.png",
+    children: [],
+  },
+  {
+    key: ModelType.LANG_CHAIN,
+    model: ModelType.LANG_CHAIN,
+    imgUrl: "/images/lang_chain.png",
+    children: [],
   },
 ];

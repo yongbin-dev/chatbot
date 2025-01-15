@@ -6,3 +6,7 @@
   background-color: white;
   z-index: 99999;
 }
+
+.header_button_text {
+  color: rgba(0, 0, 0, 0.54)
+}

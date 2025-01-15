@@ -14,11 +14,10 @@ export type OpenAIModelList = {
 
 export interface OpenAIModelContextType {
   openAIModelList: OpenAIModelList;
-  setOpenAIModelList: (value: OpenAIModelList) => void;
 }
 
-const OpenAIModelContext = React.createContext<OpenAIModelContextType | null>(
-  null
-);
+const OpenAIModelContext = React.createContext<OpenAIModelContextType>({
+  openAIModelList: { data: [] },
+});
 
 export default OpenAIModelContext;

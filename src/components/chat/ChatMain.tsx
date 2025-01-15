@@ -75,7 +75,6 @@ const ChatMain = ({
     <>
       <Container>
         {isPic == true ? makeChatPicCard(picMessage) : makeChatChard(message)}
-
         {currentMessage && (
           <div>
             <ChatCard

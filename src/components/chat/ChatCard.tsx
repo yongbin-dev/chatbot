@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import CustomMarkdown from '../common/CommonMarkdown';
+import styles from "./style/chat.module.css"
 
 interface Props {
   question: any,
@@ -41,8 +42,8 @@ const ChatCard = ({ question, answer, messageId, handleDeleteButton }: Props) =>
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
-        <Typography variant="h5" component="div">
-          <Tooltip title={question}>
+        <Typography variant="h5" component="h2">
+          <Tooltip title={question} >
             <b>{content}</b>
           </Tooltip>
           <Tooltip title={"자세히 보기"}>
@@ -56,9 +57,10 @@ const ChatCard = ({ question, answer, messageId, handleDeleteButton }: Props) =>
             </IconButton>
           </Tooltip>
         </Typography>
-        <Typography variant="body2">
+
+        <div className={styles.markdown_div}>
           <CustomMarkdown text={answer} />
-        </Typography>
+        </div>
       </CardContent>
     </Card>
   );

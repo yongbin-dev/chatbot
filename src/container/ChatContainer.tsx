@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-
 import { RootState } from "@/redux/store";
 import {
   addChatMessage,
@@ -13,11 +12,11 @@ import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import ChatFooter from "@/components/chat/ChatFooter";
 import ChatMain from "@/components/chat/ChatMain";
 import CommonAlert from "@/components/common/CommonAlert";
-import openAIUtils from "@/utils/openai";
-import { Backdrop, CircularProgress } from "@mui/material";
 import { ModelType } from "@/constants/modelConstants";
 import OpenAIModelContext from "@/contexts/ModelContext";
-import { ModeEdit } from "@mui/icons-material";
+import openAIUtils from "@/utils/openai";
+import { Backdrop, CircularProgress } from "@mui/material";
+import styles from "./container.module.css"
 
 type CurrentChat = {
   id: number;
@@ -49,7 +48,7 @@ const ChatContainer = ({ chatId }: Props) => {
       return;
     }
 
-    const errorMessage = "api 를 호출하는 도중에 에러가 발생하였습니다.\n모델을 변경하여 다시 시도해주세요.";
+    const errorMessage = "api를 호출하는 도중에 에러가 발생하였습니다.\n모델을 변경하여 다시 시도해주세요.";
     if (chat.isPic == true) {
       createPicChat(inputValue).catch(() => {
         setInputValue(inputValue)
@@ -57,13 +56,11 @@ const ChatContainer = ({ chatId }: Props) => {
       });
     } else {
       createChat(inputValue).then(() => {
-      }).catch((e: Error) => {
+      }).catch(() => {
         setInputValue(inputValue)
         alert(errorMessage);
       });
     }
-
-
   };
 
   const createPicChat = async (inputValue: string) => {
@@ -209,23 +206,8 @@ const ChatContainer = ({ chatId }: Props) => {
       </Backdrop>
       {chat && (
         <>
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              overflow: "auto"
-            }}
-          >
-            <div
-              id={"mainDiv"}
-              style={{
-                height: "70%",
-                marginTop: "20px",
-                overflowY: "auto",
-              }}
-            >
+          <div className={styles.main_container}>
+            <div id={"mainDiv"} className={styles.main_div}>
               <ChatMain
                 chatId={chatId}
                 chatMessage={chat.message}
@@ -235,7 +217,7 @@ const ChatContainer = ({ chatId }: Props) => {
               />
             </div>
 
-            <div style={{ marginBottom: "20px", position: "absolute", bottom: 0, width: "100%" }}>
+            <div className={styles.footer_div}>
               <ChatFooter
                 handleQuestionButton={handleQuestionButton}
                 handleInitButton={handleInitButton}

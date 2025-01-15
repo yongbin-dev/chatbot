@@ -39,11 +39,11 @@ export default function ChatDialog({ isOpenDialog, setIsOpenDialog }: Props) {
   const [isPicDisabled, setIsPicDisabled] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    if (model == ModelType.CLAUDE) {
-      setIsPicDisabled(true)
-      setChecked(false)
-    } else if (model == ModelType.GPT) {
+    if (model == ModelType.GPT) {
       setIsPicDisabled(false)
+    } else {
+      setChecked(false)
+      setIsPicDisabled(true)
     }
   }, [model])
 
@@ -146,15 +146,6 @@ export default function ChatDialog({ isOpenDialog, setIsOpenDialog }: Props) {
               <Checkbox {...label} color="success" onChange={handleOnChange} checked={checked} disabled={isPicDisabled} />
             </div>
           </div>
-          {/*<Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-            magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-            ullamcorper nulla non metus auctor fringilla.
-          </Typography> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>취소</Button>

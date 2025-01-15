@@ -1,10 +1,10 @@
 import LoginContainer from '@/container/LoginContainer';
-import MainLayout from '@layouts/MainLayout';
+import LoginLayout from '@/layouts/LoginLayout';
 
 export default function LoginPage() {
   return (
-    <MainLayout>
-      <LoginContainer/>
-    </MainLayout>
+    <LoginLayout>
+      <LoginContainer />
+    </LoginLayout>
   );
 }

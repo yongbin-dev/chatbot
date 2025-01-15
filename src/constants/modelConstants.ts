@@ -1,4 +1,5 @@
-export enum ModelType{
+export enum ModelType {
   GPT = "GPT",
-  CLAUDE = "CLAUDE"
+  CLAUDE = "CLAUDE",
+  LANG_CHAIN = "LANG_CHAIN",
 }

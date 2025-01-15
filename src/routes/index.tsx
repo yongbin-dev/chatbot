@@ -29,15 +29,15 @@ export default function Router() {
   return useRoutes([
     {
       path: '',
-      children: [
-        { element: <Chat />, index: true },
-      ],
+      element: <Chat />
     },
     {
       path: 'chat',
-      children: [
-        { element: <Chat />, index: true },
-      ],
+      element: <Chat />
+    },
+    {
+      path: 'langchain',
+      element: <LangChain />
     },
     {
       path: '*',
@@ -53,117 +53,118 @@ export default function Router() {
 
 // AUTHENTICATION
 const Chat = Loadable(lazy(() => import('@pages/ChatPage')));
+const LangChain = Loadable(lazy(() => import('@/pages/LangChainPage')));
 
 
 
 
-    // {
-    //   path: 'auth',
-    //   children: [
-    //     // {
-    //     //   path: 'login',
-    //     //   element: (
-    //     //     <GuestGuard>
-    //     //       <Login />
-    //     //     </GuestGuard>
-    //     //   ),
-    //     // },
-    //     // {
-    //     //   path: 'register',
-    //     //   element: (
-    //     //     <GuestGuard>
-    //     //       <Register />
-    //     //     </GuestGuard>
-    //     //   ),
-    //     // },
-    //     { path: 'login-unprotected', element: <Login /> },
-    //     { path: 'register-unprotected', element: <Register /> },
-    //     { path: 'reset-password', element: <ResetPassword /> },
-    //     { path: 'verify', element: <VerifyCode /> },
-    //   ],
-    // },
+// {
+//   path: 'auth',
+//   children: [
+//     // {
+//     //   path: 'login',
+//     //   element: (
+//     //     <GuestGuard>
+//     //       <Login />
+//     //     </GuestGuard>
+//     //   ),
+//     // },
+//     // {
+//     //   path: 'register',
+//     //   element: (
+//     //     <GuestGuard>
+//     //       <Register />
+//     //     </GuestGuard>
+//     //   ),
+//     // },
+//     { path: 'login-unprotected', element: <Login /> },
+//     { path: 'register-unprotected', element: <Register /> },
+//     { path: 'reset-password', element: <ResetPassword /> },
+//     { path: 'verify', element: <VerifyCode /> },
+//   ],
+// },
 
-    // Dashboard Routes
-    // {
-    //   path: 'dashboard',
-    //   element: (
-    //     <AuthGuard>
-    //       <DashboardLayout />
-    //     </AuthGuard>
-    //   ),
-    //   children: [
-    //     { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
-    //     { path: 'app', element: <GeneralApp /> },
-    //     { path: 'ecommerce', element: <GeneralEcommerce /> },
-    //     { path: 'analytics', element: <GeneralAnalytics /> },
-    //     { path: 'banking', element: <GeneralBanking /> },
-    //     { path: 'booking', element: <GeneralBooking /> },
+// Dashboard Routes
+// {
+//   path: 'dashboard',
+//   element: (
+//     <AuthGuard>
+//       <DashboardLayout />
+//     </AuthGuard>
+//   ),
+//   children: [
+//     { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+//     { path: 'app', element: <GeneralApp /> },
+//     { path: 'ecommerce', element: <GeneralEcommerce /> },
+//     { path: 'analytics', element: <GeneralAnalytics /> },
+//     { path: 'banking', element: <GeneralBanking /> },
+//     { path: 'booking', element: <GeneralBooking /> },
 
-    //     {
-    //       path: 'e-commerce',
-    //       children: [
-    //         { element: <Navigate to="/dashboard/e-commerce/shop" replace />, index: true },
-    //         { path: 'shop', element: <EcommerceShop /> },
-    //         { path: 'product/:name', element: <EcommerceProductDetails /> },
-    //         { path: 'list', element: <EcommerceProductList /> },
-    //         { path: 'product/new', element: <EcommerceProductCreate /> },
-    //         { path: 'product/:name/edit', element: <EcommerceProductCreate /> },
-    //         { path: 'checkout', element: <EcommerceCheckout /> },
-    //       ],
-    //     },
-    //     {
-    //       path: 'user',
-    //       children: [
-    //         { element: <Navigate to="/dashboard/user/profile" replace />, index: true },
-    //         { path: 'profile', element: <UserProfile /> },
-    //         { path: 'cards', element: <UserCards /> },
-    //         { path: 'list', element: <UserList /> },
-    //         { path: 'new', element: <UserCreate /> },
-    //         { path: ':name/edit', element: <UserCreate /> },
-    //         { path: 'account', element: <UserAccount /> },
-    //       ],
-    //     },
-    //     {
-    //       path: 'invoice',
-    //       children: [
-    //         { element: <Navigate to="/dashboard/invoice/list" replace />, index: true },
-    //         { path: 'list', element: <InvoiceList /> },
-    //         { path: ':id', element: <InvoiceDetails /> },
-    //         { path: ':id/edit', element: <InvoiceEdit /> },
-    //         { path: 'new', element: <InvoiceCreate /> },
-    //       ],
-    //     },
-    //     {
-    //       path: 'blog',
-    //       children: [
-    //         { element: <Navigate to="/dashboard/blog/posts" replace />, index: true },
-    //         { path: 'posts', element: <BlogPosts /> },
-    //         { path: 'post/:title', element: <BlogPost /> },
-    //         { path: 'new', element: <BlogNewPost /> },
-    //       ],
-    //     },
-    //     {
-    //       path: 'mail',
-    //       children: [
-    //         { element: <Navigate to="/dashboard/mail/all" replace />, index: true },
-    //         { path: 'label/:customLabel', element: <Mail /> },
-    //         { path: 'label/:customLabel/:mailId', element: <Mail /> },
-    //         { path: ':systemLabel', element: <Mail /> },
-    //         { path: ':systemLabel/:mailId', element: <Mail /> },
-    //       ],
-    //     },
-    //     {
-    //       path: 'chat',
-    //       children: [
-    //         { element: <Chat />, index: true },
-    //         { path: 'new', element: <Chat /> },
-    //         { path: ':conversationKey', element: <Chat /> },
-    //       ],
-    //     },
-    //     { path: 'calendar', element: <Calendar /> },
-    //     { path: 'kanban', element: <Kanban /> },
-    //   ],
-    // },
+//     {
+//       path: 'e-commerce',
+//       children: [
+//         { element: <Navigate to="/dashboard/e-commerce/shop" replace />, index: true },
+//         { path: 'shop', element: <EcommerceShop /> },
+//         { path: 'product/:name', element: <EcommerceProductDetails /> },
+//         { path: 'list', element: <EcommerceProductList /> },
+//         { path: 'product/new', element: <EcommerceProductCreate /> },
+//         { path: 'product/:name/edit', element: <EcommerceProductCreate /> },
+//         { path: 'checkout', element: <EcommerceCheckout /> },
+//       ],
+//     },
+//     {
+//       path: 'user',
+//       children: [
+//         { element: <Navigate to="/dashboard/user/profile" replace />, index: true },
+//         { path: 'profile', element: <UserProfile /> },
+//         { path: 'cards', element: <UserCards /> },
+//         { path: 'list', element: <UserList /> },
+//         { path: 'new', element: <UserCreate /> },
+//         { path: ':name/edit', element: <UserCreate /> },
+//         { path: 'account', element: <UserAccount /> },
+//       ],
+//     },
+//     {
+//       path: 'invoice',
+//       children: [
+//         { element: <Navigate to="/dashboard/invoice/list" replace />, index: true },
+//         { path: 'list', element: <InvoiceList /> },
+//         { path: ':id', element: <InvoiceDetails /> },
+//         { path: ':id/edit', element: <InvoiceEdit /> },
+//         { path: 'new', element: <InvoiceCreate /> },
+//       ],
+//     },
+//     {
+//       path: 'blog',
+//       children: [
+//         { element: <Navigate to="/dashboard/blog/posts" replace />, index: true },
+//         { path: 'posts', element: <BlogPosts /> },
+//         { path: 'post/:title', element: <BlogPost /> },
+//         { path: 'new', element: <BlogNewPost /> },
+//       ],
+//     },
+//     {
+//       path: 'mail',
+//       children: [
+//         { element: <Navigate to="/dashboard/mail/all" replace />, index: true },
+//         { path: 'label/:customLabel', element: <Mail /> },
+//         { path: 'label/:customLabel/:mailId', element: <Mail /> },
+//         { path: ':systemLabel', element: <Mail /> },
+//         { path: ':systemLabel/:mailId', element: <Mail /> },
+//       ],
+//     },
+//     {
+//       path: 'chat',
+//       children: [
+//         { element: <Chat />, index: true },
+//         { path: 'new', element: <Chat /> },
+//         { path: ':conversationKey', element: <Chat /> },
+//       ],
+//     },
+//     { path: 'calendar', element: <Calendar /> },
+//     { path: 'kanban', element: <Kanban /> },
+//   ],
+// },
 
 // const Register = Loadable(lazy(() => import('../pages/auth/Register')));
 // const ResetPassword = Loadable(lazy(() => import('../pages/auth/ResetPassword')));

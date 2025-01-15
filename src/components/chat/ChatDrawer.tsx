@@ -20,9 +20,9 @@ import ListItemText from '@mui/material/ListItemText';
 import { useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChatDialog from './ChatDialog';
+import ChatModelDescriptionDialog from "./ChatModelDescriptionDialog";
 import ChatSystemMessageDialog from "./ChatSystemMessageDialog";
 import style from "./style/chat.module.css";
-import ChatModelDescriptionDialog from "./ChatModelDescriptionDialog";
 
 
 const getMenuItem = (data: OpenAIModel[], modelType: ModelType) => {
@@ -45,7 +45,6 @@ interface Props {
 
 export default function ChatDrawer({ }: Props) {
   const openAIModelContext = useContext(OpenAIModelContext);
-
   const { model } = useSelector((state: RootState) => state.model);
   const { chats, activeChat } = useSelector((state: RootState) => state.chat);
 
@@ -118,10 +117,12 @@ export default function ChatDrawer({ }: Props) {
 
   return (
     <>
+
       <div style={{ position: "absolute", top: "10px", left: "10px" }}>
         <IconButton onClick={handleIconButtonClick}>
           <DensityMediumIcon />
         </IconButton>
+
       </div >
 
       <div style={{ position: "absolute", top: "10px", right: "10px" }}>
