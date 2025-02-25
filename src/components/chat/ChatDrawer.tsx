@@ -59,7 +59,7 @@ const getModelItem = (data: OpenAIModel[], modelType: ModelType) => {
       )
       const modelComponent = gptModelList[modelKey].map((mt: OpenAIModel) => {
         return (
-          <MenuItem key={mt.created} value={mt.created}>
+          <MenuItem key={mt.id} value={mt.id}>
             {mt.id}
           </MenuItem>
         )
@@ -144,6 +144,7 @@ export default function ChatDrawer({ }: Props) {
 
   const handleChange = (event: SelectChangeEvent) => {
     if (!event.target.value) return;
+    console.log(event.target.value)
     const model = event.target.value;
     dispatch(changeModel({ model }))
   };
