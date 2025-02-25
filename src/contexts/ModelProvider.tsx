@@ -1,4 +1,3 @@
-import { OPEN_API } from '@/config';
 import { ModelType } from '@/constants/modelConstants';
 import { getAnthropicModelList, getOpenAIModelList } from '@/utils/openai.js';
 import { useEffect, useState } from "react";
