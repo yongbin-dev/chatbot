@@ -9,7 +9,7 @@ import BuildIcon from '@mui/icons-material/Build';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import PhotoIcon from '@mui/icons-material/Photo';
-import { Button, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, Divider, FormControl, IconButton, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -24,20 +24,64 @@ import ChatModelDescriptionDialog from "./ChatModelDescriptionDialog";
 import ChatSystemMessageDialog from "./ChatSystemMessageDialog";
 import style from "./style/chat.module.css";
 
-
-const getMenuItem = (data: OpenAIModel[], modelType: ModelType) => {
-  const modelTypeList = data
-    .filter((i: OpenAIModel) => i.model == modelType)
-    .sort((a: any, b: any) => { return b.created - a.created })
-    .map((mt: OpenAIModel) => {
-      return (
-        <MenuItem key={mt.id} value={mt.id}>
-          {mt.id}
-        </MenuItem>
-      )
+const convertGPTModelList = (data: OpenAIModel[]) => {
+  const groupList: any = { 'others': [] };
+  data.filter((i: OpenAIModel) => i.model == ModelType.GPT)
+    .map((model: any) => {
+      if (model.groups.length == 0) {
+        groupList['others'].push(model)
+      } else {
+        const firstModelGroup = model.groups[0];
+        if (Object.keys(groupList).indexOf(firstModelGroup) < 0) {
+          groupList[firstModelGroup] = [model]
+        } else {
+          groupList[firstModelGroup].push(model)
+        }
+      }
     })
-  return modelTypeList
 
+  return groupList
+}
+
+const getModelItem = (data: OpenAIModel[], modelType: ModelType) => {
+  if (modelType === ModelType.GPT) {
+    const gptModelList = convertGPTModelList(data)
+    const modelTypeList: any = [];
+
+    Object.keys(gptModelList).sort().map((modelKey: any) => {
+      modelTypeList.push(
+        <div key={modelKey}>
+          <ListSubheader component="div" id="nested-list-subheader">
+            {modelKey}
+          </ListSubheader>
+          <Divider />
+        </div>
+      )
+      const modelComponent = gptModelList[modelKey].map((mt: OpenAIModel) => {
+        return (
+          <MenuItem key={mt.created} value={mt.created}>
+            {mt.id}
+          </MenuItem>
+        )
+      })
+      modelTypeList.push(modelComponent)
+    })
+
+    return modelTypeList;
+
+  } else {
+    const modelTypeList = data.filter((i: OpenAIModel) => i.model == modelType)
+      .sort((a: any, b: any) => { return b.id - a.id })
+      .map((mt: OpenAIModel) => {
+        return (
+          <MenuItem key={mt.id} value={mt.id}>
+            {mt.id}
+          </MenuItem>
+        )
+      })
+
+    return modelTypeList
+  }
 }
 
 interface Props {
@@ -106,10 +150,11 @@ export default function ChatDrawer({ }: Props) {
 
   const getModelList = () => {
     const modelType = chats.filter((c: any) => c.id == activeChat.id)[0];
+
     if (!modelType || !openAIModelContext) return <></>;
 
     const { data } = openAIModelContext.openAIModelList
-    const modelTypeList = getMenuItem(data, modelType.model)
+    const modelTypeList = getModelItem(data, modelType.model)
     return modelTypeList
   }
 

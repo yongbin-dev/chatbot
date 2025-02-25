@@ -16,6 +16,37 @@ const anthropic = new Anthropic({
   dangerouslyAllowBrowser: true,
 });
 
+export const getOpenAIModelList = async () => {
+  const response = await fetch("https://api.openai.com/dashboard/models", {
+    // const response = await fetch('https://api.openai.com/v1/models', {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPEN_API}`,
+    },
+  });
+
+  const { data } = await response.json();
+  return data;
+};
+
+export const getAnthropicModelList = async () => {
+  const { data } = await anthropic.models.list({
+    limit: 20,
+  });
+  // { id: "claude-3-5-sonnet-latest", object: 'model', model: ModelType.CLAUDE },
+  // { id: "claude-3-5-sonnet-20241022", object: 'model', model: ModelType.CLAUDE },
+  // { id: "claude-3-5-sonnet-20240620", object: 'model', model: ModelType.CLAUDE },
+  // { id: "claude-3-opus-20240229	", object: 'model', model: ModelType.CLAUDE },
+  // { id: "claude-3-sonnet-20240229", object: 'model', model: ModelType.CLAUDE },
+  // { id: "claude-3-haiku-20240307", object: 'model', model: ModelType.CLAUDE },
+
+  return data.map((model) => {
+    return { id: model.id, object: model.type, model: ModelType.CLAUDE };
+  });
+  // return modelList;
+};
+
 const openAIUtils = {
   async sendQuestion(
     originalMessage: ChatCompletionMessageParam[] | MessageParam[],

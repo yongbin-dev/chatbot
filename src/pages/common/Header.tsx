@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const menuItems = [
   { title: 'LLM', url: '/chat' },
-  { title: 'LangChain', url: '/langchain' }
+  // { title: 'LangChain', url: '/langchain' }
 ];
 
 const Header = () => {

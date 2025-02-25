@@ -9,19 +9,6 @@ import AuthProvider from "./contexts/AuthProvider.tsx";
 import ModelProvider from "./contexts/ModelProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-<<<<<<< HEAD
-  // <React.StrictMode>
-  <Provider store={store}>
-    <BrowserRouter>
-      <ModelProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </ModelProvider>
-    </BrowserRouter>
-  </Provider>
-  // </React.StrictMode >
-=======
   <Provider store={store}>
     <BrowserRouter>
       <AuthProvider>
@@ -31,5 +18,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       </AuthProvider>
     </BrowserRouter>
   </Provider>
->>>>>>> main
 );

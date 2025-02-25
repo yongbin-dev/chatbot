@@ -54,10 +54,10 @@ export const model_list: Model[] = [
     imgUrl: "/images/claude.png",
     children: [],
   },
-  {
-    key: ModelType.LANG_CHAIN,
-    model: ModelType.LANG_CHAIN,
-    imgUrl: "/images/lang_chain.png",
-    children: [],
-  },
+  // {
+  //   key: ModelType.LANG_CHAIN,
+  //   model: ModelType.LANG_CHAIN,
+  //   imgUrl: "/images/lang_chain.png",
+  //   children: [],
+  // },
 ];
