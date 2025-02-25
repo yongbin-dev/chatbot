@@ -87,7 +87,7 @@ const openAIUtils = {
           message = originalMessage.filter((i) => i.role == "user");
           const msg = await anthropic.messages.stream({
             model,
-            max_tokens: 1024,
+            max_tokens: 4048,
             messages: message as MessageParam[],
           });
           return msg;
