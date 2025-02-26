@@ -69,7 +69,7 @@ const openAIUtils = {
         };
 
         if (isSystem == false) {
-          message = originalMessage.filter((i) => i.role == "user");
+          message = originalMessage.filter((i) => i.role != "system");
           delete option.temperature;
         }
 
@@ -84,7 +84,7 @@ const openAIUtils = {
         }
       case ModelType.CLAUDE:
         try {
-          message = originalMessage.filter((i) => i.role == "user");
+          message = originalMessage.filter((i) => i.role != "system");
           const msg = await anthropic.messages.stream({
             model,
             max_tokens: 4048,

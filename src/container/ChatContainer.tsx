@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
 import { RootState } from "@/redux/store";
 import {
   addChatMessage,
   addChatPic,
   initChatMessage,
 } from "@redux/slices/chat";
+import { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
@@ -16,7 +16,7 @@ import { ModelType } from "@/constants/modelConstants";
 import OpenAIModelContext from "@/contexts/ModelContext";
 import openAIUtils from "@/utils/openai";
 import { Backdrop, CircularProgress } from "@mui/material";
-import styles from "./container.module.css"
+import styles from "./container.module.css";
 
 type CurrentChat = {
   id: number;
@@ -57,7 +57,7 @@ const ChatContainer = ({ chatId }: Props) => {
     } else {
       createChat(inputValue).then(() => {
       }).catch((e: Error) => {
-        console.log(e.message)
+        console.error(e)
         setInputValue(inputValue)
         alert(errorMessage);
       });
