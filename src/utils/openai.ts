@@ -53,7 +53,8 @@ const openAIUtils = {
     modelType: string,
     model: string,
     isSlice = true,
-    isSystem = true
+    isSystem = true,
+    maxToken: number
   ) {
     let message: any = originalMessage;
     if (isSlice == true) {
@@ -76,6 +77,7 @@ const openAIUtils = {
         try {
           const stream = await openai.chat.completions.create({
             messages: message as ChatCompletionMessageParam[],
+            max_tokens: Number(maxToken),
             ...option,
           });
           return stream;
@@ -84,10 +86,11 @@ const openAIUtils = {
         }
       case ModelType.CLAUDE:
         try {
+          console.log(maxToken);
           message = originalMessage.filter((i) => i.role != "system");
           const msg = await anthropic.messages.stream({
             model,
-            max_tokens: 4048,
+            max_tokens: Number(maxToken),
             messages: message as MessageParam[],
           });
           return msg;

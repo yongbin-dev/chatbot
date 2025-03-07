@@ -38,7 +38,7 @@ const ChatContainer = ({ chatId }: Props) => {
   const chat = chats.filter((i: any) => i.id == chatId)[0];
   const dispatch = useDispatch();
 
-  const handleQuestionButton = async (inputValue: string, setInputValue: Function) => {
+  const handleQuestionButton = async (inputValue: string, setInputValue: Function, maxToken: number = 4048) => {
     if (!inputValue.trim()) {
       return <CommonAlert msg={"질문"}></CommonAlert>;
     }
@@ -55,7 +55,7 @@ const ChatContainer = ({ chatId }: Props) => {
         alert(errorMessage);
       });
     } else {
-      createChat(inputValue).then(() => {
+      createChat(inputValue, maxToken).then(() => {
       }).catch((e: Error) => {
         console.error(e)
         setInputValue(inputValue)
@@ -88,7 +88,7 @@ const ChatContainer = ({ chatId }: Props) => {
     moveScroll();
   };
 
-  const createChat = async (inputValue: string) => {
+  const createChat = async (inputValue: string, maxToken: number) => {
 
     if (!chat.message) {
       alert('채팅방을 선택해주세요!');
@@ -108,7 +108,7 @@ const ChatContainer = ({ chatId }: Props) => {
 
     const modelType = chat.model
     let result: any
-    result = await sendQuestion(newMessage, modelType, system);
+    result = await sendQuestion(newMessage, modelType, system, maxToken);
 
     let answerStream = "";
 
@@ -181,8 +181,8 @@ const ChatContainer = ({ chatId }: Props) => {
     mainDiv.scrollTop = mainDiv.scrollHeight + 9999;
   };
 
-  const sendQuestion = async (newMessage: ChatCompletionMessageParam[], modelType: ModelType, system: boolean) => {
-    return await openAIUtils.sendQuestion(newMessage, modelType, model, false, system)
+  const sendQuestion = async (newMessage: ChatCompletionMessageParam[], modelType: ModelType, system: boolean, maxToken: number) => {
+    return await openAIUtils.sendQuestion(newMessage, modelType, model, false, system, maxToken)
   }
 
   const isModelContainSystem = () => {

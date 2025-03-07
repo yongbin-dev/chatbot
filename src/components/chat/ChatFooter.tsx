@@ -1,18 +1,18 @@
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import { Container } from "@mui/material";
+import { Container, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import classes from "./style/chat.module.css";
 
 interface Props {
-  readonly handleQuestionButton: (inputValue: string, setInputValue: Function) => void;
+  readonly handleQuestionButton: (inputValue: string, setInputValue: Function, maxToken: number) => void;
   readonly handleInitButton: () => void;
 }
 
 const ChatFooter = ({ handleQuestionButton }: Props) => {
-
-
   const [inputValue, setInputValue] = useState<string>();
+  const [maxToken, setMaxToken] = useState<number>(4048);
+
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
@@ -56,9 +56,15 @@ const ChatFooter = ({ handleQuestionButton }: Props) => {
   const onClickQuestionButton = () => {
     if (!inputValue) return;
     setInputValue('')
-    handleQuestionButton(inputValue, setInputValue);
+    handleQuestionButton(inputValue, setInputValue, maxToken);
   };
 
+  const onTokenChange = (e: any) => {
+    const value = e.target.value;
+    if (!value) return;
+
+    setMaxToken(value);
+  }
 
   return (
     <Container>
@@ -74,6 +80,17 @@ const ChatFooter = ({ handleQuestionButton }: Props) => {
         </div>
 
         <div className={classes.button_wrapper}>
+          <TextField
+            id="outlined-basic"
+            label="token"
+            variant="outlined"
+            defaultValue={maxToken}
+            size="small"
+            type={"number"}
+            onChange={onTokenChange}
+            style={{ marginRight: '1em', width: '100px' }}
+          />
+
           <Button
             component="label"
             role={undefined}
