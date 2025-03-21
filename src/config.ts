@@ -8,6 +8,8 @@ export const HOST_API = import.meta.env.VITE_HOST_API;
 export const OPEN_API = import.meta.env.VITE_OPEN_API_KEY;
 export const CLAUDE_API_KEY = import.meta.env.VITE_CLAUDE_API_KEY;
 
+export const OLLAMA_URL =
+  import.meta.env.VITE_OLLMA_API_KEY || "http://localhost:11434";
 
 // LOGIN
 export const ADMIN_ID = import.meta.env.VITE_ADMIN_ID;

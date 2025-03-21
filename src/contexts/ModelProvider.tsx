@@ -1,5 +1,6 @@
 import { ModelType } from '@/constants/modelConstants';
 import { getAnthropicModelList, getOpenAIModelList } from '@/utils/openai.js';
+import { getOllamaModelList } from '@/utils/ollama'
 import { useEffect, useState } from "react";
 import OpenAIModelContext, { OpenAIModelList } from "./ModelContext.js";
 
@@ -17,8 +18,9 @@ const ModelProvider = ({ children }: Props) => {
 
         const openModelList = await getOpenAIModelList()
         const claudeModelList = await getAnthropicModelList()
+        const ollamaModelList = await getOllamaModelList();
 
-        const modelArr = claudeModelList;
+        const modelArr = [...claudeModelList, ...ollamaModelList];
 
         openModelList.forEach((obj: any) => {
           const id: String = obj.id;
@@ -30,6 +32,7 @@ const ModelProvider = ({ children }: Props) => {
 
           modelArr.push(gpt);
         });
+
 
         const model_list: any = {
           data: modelArr
@@ -43,7 +46,6 @@ const ModelProvider = ({ children }: Props) => {
     };
 
     fetchData();
-
   }, []);
 
   return (

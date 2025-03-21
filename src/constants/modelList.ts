@@ -54,6 +54,12 @@ export const model_list: Model[] = [
     imgUrl: "/images/claude.png",
     children: [],
   },
+  {
+    key: ModelType.OLLAMA,
+    model: ModelType.OLLAMA,
+    imgUrl: "/images/ollama.png",
+    children: [],
+  },
   // {
   //   key: ModelType.LANG_CHAIN,
   //   model: ModelType.LANG_CHAIN,

@@ -17,6 +17,7 @@ import OpenAIModelContext from "@/contexts/ModelContext";
 import openAIUtils from "@/utils/openai";
 import { Backdrop, CircularProgress } from "@mui/material";
 import styles from "./container.module.css";
+import { sendOllamaQuestion } from "@/utils/ollama";
 
 type CurrentChat = {
   id: number;
@@ -31,7 +32,7 @@ interface Props {
 const ChatContainer = ({ chatId }: Props) => {
   const [loading, setLoading] = useState(false);
   const { chats } = useSelector((state: RootState) => state.chat);
-  const { model } = useSelector((state: RootState) => state.model);
+  const { model: currentModel } = useSelector((state: RootState) => state.model);
   const [result, setResult] = useState<CurrentChat | null>();
   const openAIModelContext = useContext(OpenAIModelContext);
 
@@ -43,7 +44,7 @@ const ChatContainer = ({ chatId }: Props) => {
       return <CommonAlert msg={"질문"}></CommonAlert>;
     }
 
-    if (!model) {
+    if (!currentModel) {
       alert('모델을 선택해주세요.')
       return;
     }
@@ -107,8 +108,11 @@ const ChatContainer = ({ chatId }: Props) => {
     newMessage.push(msg);
 
     const modelType = chat.model
-    let result: any
-    result = await sendQuestion(newMessage, modelType, system, maxToken);
+
+
+
+    let result: any = modelType != ModelType.OLLAMA ? await sendQuestion(newMessage, modelType, system, maxToken)
+      : await sendOllamaQuestion(currentModel, newMessage);
 
     let answerStream = "";
 
@@ -158,6 +162,31 @@ const ChatContainer = ({ chatId }: Props) => {
 
         newMessage.push(claudeMsg);
         break;
+
+      case ModelType.OLLAMA:
+        for await (const part of result) {
+          if (part.done != true) {
+            answerStream += part.message.content;
+          }
+          const currentChat: CurrentChat = {
+            id: parseInt(chatId),
+            question: inputValue,
+            answer: answerStream,
+          };
+          setResult(currentChat);
+          moveScroll();
+        }
+
+        const ollamaMsg: ChatCompletionMessageParam = {
+          role: "assistant",
+          content: answerStream,
+        };
+
+        newMessage.push(ollamaMsg);
+
+        break;
+
+
     }
 
 
@@ -182,13 +211,13 @@ const ChatContainer = ({ chatId }: Props) => {
   };
 
   const sendQuestion = async (newMessage: ChatCompletionMessageParam[], modelType: ModelType, system: boolean, maxToken: number) => {
-    return await openAIUtils.sendQuestion(newMessage, modelType, model, false, system, maxToken)
+    return await openAIUtils.sendQuestion(newMessage, modelType, currentModel, false, system, maxToken)
   }
 
   const isModelContainSystem = () => {
     if (openAIModelContext) {
       const { data } = openAIModelContext.openAIModelList;
-      const modelDetail: any = data.filter(v => model == v.id)[0];
+      const modelDetail: any = data.filter(v => currentModel == v.id)[0];
       if (modelDetail) {
         return modelDetail.system
       }

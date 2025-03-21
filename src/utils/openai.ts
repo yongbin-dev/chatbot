@@ -31,19 +31,38 @@ export const getOpenAIModelList = async () => {
 };
 
 export const getAnthropicModelList = async () => {
-  const { data } = await anthropic.models.list({
-    limit: 20,
-  });
-  // { id: "claude-3-5-sonnet-latest", object: 'model', model: ModelType.CLAUDE },
-  // { id: "claude-3-5-sonnet-20241022", object: 'model', model: ModelType.CLAUDE },
-  // { id: "claude-3-5-sonnet-20240620", object: 'model', model: ModelType.CLAUDE },
-  // { id: "claude-3-opus-20240229	", object: 'model', model: ModelType.CLAUDE },
-  // { id: "claude-3-sonnet-20240229", object: 'model', model: ModelType.CLAUDE },
-  // { id: "claude-3-haiku-20240307", object: 'model', model: ModelType.CLAUDE },
+  // const { data } = await anthropic.models.list({
+  //   limit: 20,
+  // });
+  const data = [
+    {
+      id: "claude-3-5-sonnet-latest",
+      object: "model",
+      model: ModelType.CLAUDE,
+    },
+    {
+      id: "claude-3-5-sonnet-20241022",
+      object: "model",
+      model: ModelType.CLAUDE,
+    },
+    {
+      id: "claude-3-5-sonnet-20240620",
+      object: "model",
+      model: ModelType.CLAUDE,
+    },
+    { id: "claude-3-opus-20240229	", object: "model", model: ModelType.CLAUDE },
+    {
+      id: "claude-3-sonnet-20240229",
+      object: "model",
+      model: ModelType.CLAUDE,
+    },
+    { id: "claude-3-haiku-20240307", object: "model", model: ModelType.CLAUDE },
+  ];
 
-  return data.map((model) => {
-    return { id: model.id, object: model.type, model: ModelType.CLAUDE };
-  });
+  return data;
+  // return data.map((model) => {
+  //   return { id: model.id, object: model.type, model: ModelType.CLAUDE };
+  // });
   // return modelList;
 };
 
